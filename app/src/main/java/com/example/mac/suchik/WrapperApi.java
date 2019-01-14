@@ -4,31 +4,36 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
-import okhttp3.Response;
-
-public class WrapperApi extends AsyncTask<Void, Void, Void> {
+public class WrapperApi extends AsyncTask<Void, Void, Void> implements ResponseType{
     private String lat, lon;
+    private int type;
+    private Callbacks callbacks;
 
-    public WrapperApi(String lat, String lon, int type) {
+    public WrapperApi(String lat, String lon, int type, Callbacks callbacks) {
         this.lat = lat;
         this.lon = lon;
+        this.type = type;
+        this.callbacks = callbacks;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
         boolean flag = true;
-        Wheather wheather = null;
+        Weather weather = null;
         while (flag) {
             try {
-                wheather = new Wheather(lat, lon);
+                weather = new Weather(lat, lon, callbacks);
                 flag = false;
             } catch (IOException e) {
             }
         }
-        try {
-            wheather.parseWheatherForecastsy();
-        } catch (IOException e) {
-            e.printStackTrace();
+        switch (type){
+            case ResponseType.WTODAY:
+                weather.parseWheatherToday();
+                break;
+            case ResponseType.WFORECASTS:
+                weather.parseWheatherForecasts();
+                break;
         }
         return null;
     }

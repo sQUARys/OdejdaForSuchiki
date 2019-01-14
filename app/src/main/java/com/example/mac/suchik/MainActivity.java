@@ -35,14 +35,17 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView = findViewById(R.id.text);
+        WrapperApi wrapperApi = new WrapperApi("50", "50", ResponseType.WTODAY ,MainActivity.this);
+        wrapperApi.execute();
 
     }
 
     @Override
-    public void onLoad(int type, com.example.mac.suchik.Response response) {
-        switch (type){
+    public void onLoad(com.example.mac.suchik.Response response) {
+        switch (response.type){
             case ResponseType.WTODAY:
-                textView.setText(response.response.toString());
+                textView.setText("ads");
+                response.response.toString();
                 break;
 
             case ResponseType.WFORECASTS:
