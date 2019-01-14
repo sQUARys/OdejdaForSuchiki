@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
-public class WrapperApi extends AsyncTask<Void, Void, Void> implements ResponseType{
+public class WrapperApi extends AsyncTask<Void, Void, Response> implements ResponseType{
     private String lat, lon;
     private int type;
     private Callbacks callbacks;
@@ -17,7 +17,7 @@ public class WrapperApi extends AsyncTask<Void, Void, Void> implements ResponseT
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected Response doInBackground(Void... voids) {
         boolean flag = true;
         Weather weather = null;
         while (flag) {
@@ -27,15 +27,19 @@ public class WrapperApi extends AsyncTask<Void, Void, Void> implements ResponseT
             } catch (IOException e) {
             }
         }
-        switch (type){
+        switch (type) {
             case ResponseType.WTODAY:
-                weather.parseWheatherToday();
-                break;
+                return weather.parseWheatherToday();
             case ResponseType.WFORECASTS:
-                weather.parseWheatherForecasts();
-                break;
+                return weather.parseWheatherForecasts();
+            default:
+                return null;
         }
-        return null;
     }
 
+    @Override
+    protected void onPostExecute(Response response) {
+        super.onPostExecute(response);
+        callbacks.onLoad(response);
+    }
 }

@@ -44,8 +44,7 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
     public void onLoad(com.example.mac.suchik.Response response) {
         switch (response.type){
             case ResponseType.WTODAY:
-                textView.setText("ads");
-                response.response.toString();
+                textView.setText(response.response.toString());
                 break;
 
             case ResponseType.WFORECASTS:

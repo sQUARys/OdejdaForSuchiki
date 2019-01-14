@@ -1755,7 +1755,7 @@ class Weather implements ResponseType{
             return response.body().string();
         }
     }
-    public void parseWheatherToday(){
+    public Response parseWheatherToday(){
         HashMap<String, String> now = new HashMap<>();
         type = ResponseType.WTODAY;
         try{
@@ -1773,10 +1773,10 @@ class Weather implements ResponseType{
             type = ResponseType.ERROR;
         }
         String s = now.toString();
-        callbacks.onLoad(new Response<>(type, now));
+        return new Response<>(type, now);
     }
 
-    public void parseWheatherForecasts() {
+    public Response parseWheatherForecasts() {
         HashMap<String, HashMap<String, HashMap<String, String>>> week = new HashMap<>();
         String[] times = {"night", "morning", "day", "evening"};
         HashMap<String, String> pieceDay;
@@ -1803,7 +1803,7 @@ class Weather implements ResponseType{
         catch (JSONException e){
             type = ResponseType.ERROR;
         }
-        callbacks.onLoad(new Response<>(type, week));
+        return new Response<>(type, week);
     }
 
 }
