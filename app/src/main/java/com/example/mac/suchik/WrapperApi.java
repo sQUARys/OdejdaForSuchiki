@@ -25,7 +25,11 @@ public class WrapperApi extends AsyncTask<Void, Void, Void> {
             } catch (IOException e) {
             }
         }
-        wheather.parseWheatherToday();
+        try {
+            wheather.parseWheatherForecastsy();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

@@ -51,13 +51,13 @@ class Wheather implements ResponseType{
         }
     }
 
-    public void parseWheatherForecastsy() throws IOException {
+    public void parseWheatherForecasts() {
         HashMap<String, HashMap<String, HashMap<String, String>>> week = new HashMap<>();
         String[] times = {"night", "morning", "day", "evening"};
         HashMap<String, String> pieceDay;
         HashMap<String, HashMap<String, String>> day;
         try{
-            JSONArray jsonArray = (new JSONObject(getResponse())).getJSONArray("forectasts");
+            JSONArray jsonArray = (new JSONObject(strResponse)).getJSONArray("forectasts");
             for (int i = 0; i < jsonArray.length(); i++){
                 JSONObject today= (JSONObject) jsonArray.get(i);
                 JSONObject timesOfDay = today.getJSONObject("parts");
