@@ -22,7 +22,7 @@ public class WrapperApi extends AsyncTask<Void, Void, Response> implements Respo
         Weather weather = null;
         while (flag) {
             try {
-                weather = new Weather(lat, lon, callbacks);
+                weather = new Weather(lat, lon);
                 flag = false;
             } catch (IOException e) {
             }
