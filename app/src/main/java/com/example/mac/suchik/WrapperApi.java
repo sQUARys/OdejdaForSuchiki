@@ -6,35 +6,28 @@ import java.io.IOException;
 
 public class WrapperApi extends AsyncTask<Void, Void, Response> implements ResponseType{
     private String lat, lon;
-    private int type;
     private Callbacks callbacks;
 
-    public WrapperApi(String lat, String lon, int type, Callbacks callbacks) {
+    public WrapperApi(String lat, String lon, Callbacks callbacks) {
         this.lat = lat;
         this.lon = lon;
-        this.type = type;
         this.callbacks = callbacks;
+
     }
 
     @Override
     protected Response doInBackground(Void... voids) {
-        boolean flag = true;
         Weather weather = null;
-        while (flag) {
+        boolean flag = true;
+        while (flag){
             try {
                 weather = new Weather(lat, lon);
                 flag = false;
             } catch (IOException e) {
+                flag = true;
             }
         }
-        switch (type) {
-            case ResponseType.WTODAY:
-                return weather.parseWheatherToday();
-            case ResponseType.WFORECASTS:
-                return weather.parseWheatherForecasts();
-            default:
-                return null;
-        }
+        return weather.parseWeather();
     }
 
     @Override
