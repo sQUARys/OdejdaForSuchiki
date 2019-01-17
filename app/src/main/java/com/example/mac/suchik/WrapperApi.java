@@ -2,17 +2,20 @@ package com.example.mac.suchik;
 
 import android.os.AsyncTask;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 
 public class WrapperApi extends AsyncTask<Void, Void, Response> implements ResponseType{
     private String lat, lon;
     private Callbacks callbacks;
+    private Gson gson;
 
-    public WrapperApi(String lat, String lon, Callbacks callbacks) {
+    public WrapperApi(String lat, String lon, Callbacks callbacks, Gson gson) {
         this.lat = lat;
         this.lon = lon;
         this.callbacks = callbacks;
-
+        this.gson = gson;
     }
 
     @Override
@@ -21,7 +24,7 @@ public class WrapperApi extends AsyncTask<Void, Void, Response> implements Respo
         boolean flag = true;
         while (flag){
             try {
-                weather = new Weather(lat, lon);
+                weather = new Weather(lat, lon, gson);
                 flag = false;
             } catch (IOException e) {
                 flag = true;

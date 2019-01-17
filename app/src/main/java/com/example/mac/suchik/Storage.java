@@ -15,7 +15,7 @@ public class Storage implements ResponseType, Callbacks{
     void updateWeather(String lat, String lon){
         new WrapperApi(lat, lon, Storage.this).execute();
     }
-    public void subscribe(int type, Callbacks callbacks){
+    void subscribe(int type, Callbacks callbacks){
         if (type_callback_rels.get(type) == null) type_callback_rels.put(type,
                 new ArrayList<Callbacks>());
         type_callback_rels.get(type).add(callbacks);
@@ -27,7 +27,7 @@ public class Storage implements ResponseType, Callbacks{
         }
     }
 
-    public void getWeatherToday(String lat, String lon){
+    void getWeatherToday(String lat, String lon){
         if (response == null) {
             updateWeather(lat, lon);
         }else {
