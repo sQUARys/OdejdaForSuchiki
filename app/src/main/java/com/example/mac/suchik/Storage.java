@@ -2,6 +2,7 @@ package com.example.mac.suchik;
 
 import android.content.Context;
 
+import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.WeatherData;
 import com.google.gson.Gson;
 
@@ -16,6 +17,9 @@ public class Storage implements ResponseType, Callbacks{
     private String[] position;
     private HashMap<Integer, List<Callbacks>> type_callback_rels = new LinkedHashMap<>();
     private Gson gson;
+    Context mCtx;
+
+    private GetClothes getClothes;
 
     private static Storage _instance;
 
@@ -28,6 +32,9 @@ public class Storage implements ResponseType, Callbacks{
     }
 
     Storage(Context context){
+        this.mCtx = context;
+        //this.getClothes = new GetClothes(context, Storage.this);
+        //getClothes.execute(new Fact());
         this.gson = new Gson();
         geoposition = new Geoposition(context);
     }
@@ -38,6 +45,10 @@ public class Storage implements ResponseType, Callbacks{
 
     void updatePosition(){
         onLoad(geoposition.start());
+    }
+
+    void getClothes(){
+        GetClothes clothes = getClothes.execute(weather);
     }
 
     void setPosition(String lat, String lon){
@@ -136,6 +147,15 @@ public class Storage implements ResponseType, Callbacks{
                         callbacks.onLoad(new Response<>(ResponseType.GGEOPOSITION, position));
                     else callbacks.onLoad(response);
                 }
+                break;
+            case ResponseType.CLOTHES:
+                if (type_callback_rels.get(ResponseType.CLOTHES) == null)
+                    type_callback_rels.put(ResponseType.CLOTHES, new ArrayList<Callbacks>());
+                list = type_callback_rels.get(ResponseType.CLOTHES);
+                for (Callbacks callbacks: list) {
+                    callbacks.onLoad(response);
+                }
+                break;
         }
     }
 }
