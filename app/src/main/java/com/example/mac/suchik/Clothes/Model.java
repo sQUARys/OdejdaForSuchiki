@@ -9,19 +9,24 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
 
-import java.math.BigDecimal;
+import com.example.mac.suchik.Callbacks;
+import com.example.mac.suchik.MainActivity;
+import com.example.mac.suchik.Response;
+import com.example.mac.suchik.ResponseType;
+import com.example.mac.suchik.Storage;
+import com.example.mac.suchik.WeatherData.Fact;
+import com.example.mac.suchik.WeatherData.WeatherData;
+
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
-public class Model implements LoaderManager.LoaderCallbacks<Cursor> {
+import javax.security.auth.callback.Callback;
+
+public class Model implements LoaderManager.LoaderCallbacks<Cursor>, Callbacks, ResponseType {
     private static Context mContext;
-
 
     DB db;
 
@@ -39,71 +44,72 @@ public class Model implements LoaderManager.LoaderCallbacks<Cursor> {
         this.mContext = mContext;
     }
 
-    public ArrayList<String> getClothes(Weather weather){
+
+
+
+    public ArrayList<String> getClothes(Fact weather){
         // открываем подключение к БД
 
         //Weather weather = getWeather();
 
+        Log.d(LOG_TAG, "temp = " + weather.getTemp() + " rain = " + weather.getPrec_type() + " wind = " +
+                weather.getWind_speed() + " cloud = " + weather.getCloudness());
+
+        ArrayList<String> recomendations = new ArrayList<>();
 
         db = new DB(mContext);
         db.open();
-        columns = new String[] {db.COLUMN_NAME, db.COLUMN_CATEGORY};
+        columns = new String[] {db.COLUMN_NAME, db.COLUMN_CATEGORY, db.COLUMN_COLOR};
 
-
-        if (weather.temperature > 15){
+        if (weather.getTemp() > 15){ // Температура > 15
             selection = (db.COLUMN_TEMP_MAX + " < 31");
             selection += (" and " + db.COLUMN_TEMP_MIN + " > 14");
-            switch (weather.rain){
-                case "rain":
-                    selection += (" and " + db.COLUMN_RAIN + " > 0");
-                    if (weather.wind > 10){
-                        selection += (" and " + db.COLUMN_WIND + " > 0");
-                        // Дождевик, футболка, резиновые сапоги, шорты/юбка/легкие брюки
-                    } else{
-                        selection += (" and " + db.COLUMN_WIND + " < 2");
-                        // Зонт, резиновые сапоги, футболка, шорты/юбка/легкие брюки
+            if (weather.getPrec_type() != 0) { // Идет дождь
+                selection += (" and " + db.COLUMN_RAIN + " > 0");
+                if (weather.getWind_speed() > 10) { // Скорость ветра
+                    selection += (" and " + db.COLUMN_WIND + " > 0");
+                    // Дождевик, футболка, резиновые сапоги, шорты/юбка/легкие брюки
+                } else {
+                    selection += (" and " + db.COLUMN_WIND + " < 2");
+                    // Зонт, резиновые сапоги, футболка, шорты/юбка/легкие брюки
+                }
+            } else { // Не идет дождь
+                selection += (" and " + db.COLUMN_RAIN + " < 2");
+                if (weather.getWind_speed() > 10) { // Скорость ветра
+                    selection += (" and " + db.COLUMN_WIND + " > 0");
+                    if (weather.getCloudness() == 0) { // Облачность
+                        selection += (" and " + db.COLUMN_CLOUD + " > 0");
+                        recomendations.add("Наденьте светлую одежду");
                     }
-                    break;
-                case "no":
-                    selection += (" and " + db.COLUMN_RAIN + " < 2");
-                    if (weather.wind > 10){
-                        selection += (" and " + db.COLUMN_WIND + " > 0");
-                        if (weather.cloud == "no"){
-                            selection += (" and " + db.COLUMN_CLOUD + " > 0");
-                        }
-                        // Кепка/шляпа, ветровка, легкие брюки/шорты/юбка, футболка, кроссовки/сандалии, солнечные очки
-                    } else{
-                        selection += (" and " + db.COLUMN_WIND + " < 2");
-                        if (weather.cloud == "no"){
-                            selection += (" and " + db.COLUMN_CLOUD + " > 0");
-                        }
-                        // Кепка/шляпа, легкие брюки/шорты/юбка, футболка, кроссовки/сандалии, солнечные очки
+                    // Кепка/шляпа, ветровка, легкие брюки/шорты/юбка, футболка, кроссовки/сандалии, солнечные очки
+                } else {
+                    selection += (" and " + db.COLUMN_WIND + " < 2");
+                    if (weather.getCloudness() == 0) { // Облачность
+                        selection += (" and " + db.COLUMN_CLOUD + " > 0");
                     }
-                    break;
+                    // Кепка/шляпа, легкие брюки/шорты/юбка, футболка, кроссовки/сандалии, солнечные очки
+                }
             }
-        } else if (weather.temperature > 0){
+        } else if (weather.getTemp() > 0){
             selection = (db.COLUMN_TEMP_MAX + " < 16");
             selection += (" and " + db.COLUMN_TEMP_MIN + " > -1");
-            switch (weather.rain){
-                case "rain":
-                    selection += (" and " + db.COLUMN_RAIN + " > 0");
-                    //selection += (" and " + db.COLUMN_CLOUD + " < 2");
-                    if (weather.wind > 10){
-                        selection += (" and " + db.COLUMN_WIND + " > 0");
-                        // Легкая шапка, перчатки, легкий шарф, непромокаемая куртка, брюки, футболка, резиновые сапоги
-                    } else{
-                        selection += (" and " + db.COLUMN_WIND + " < 2");
-                        // Перчатки, легкий шарф, непромокаемая куртка, брюки, футболка, резиновые сапоги, зонт
-                    }
-                    break;
-                case "no":
-                    selection += (" and " + db.COLUMN_RAIN + " < 2");
-                    // Легкая шапка, перчатки, легкий шарф, легкая куртка/джинсовка, брюки, футболка, ботинки
-                    break;
+            if (weather.getPrec_type() != 0) { // Идет дождь
+                selection += (" and " + db.COLUMN_RAIN + " > 0");
+                //selection += (" and " + db.COLUMN_CLOUD + " < 2");
+                if (weather.getWind_speed() > 10) {
+                    selection += (" and " + db.COLUMN_WIND + " > 0");
+                    // Легкая шапка, перчатки, легкий шарф, непромокаемая куртка, брюки, футболка, резиновые сапоги
+                } else {
+                    selection += (" and " + db.COLUMN_WIND + " < 2");
+                    // Перчатки, легкий шарф, непромокаемая куртка, брюки, футболка, резиновые сапоги, зонт
+                }
+            } else {
+                selection += (" and " + db.COLUMN_RAIN + " < 2");
+                // Легкая шапка, перчатки, легкий шарф, легкая куртка/джинсовка, брюки, футболка, ботинки
             }
             //Шапка, шарф, перчатки, брюки
 
-        } else if (weather.temperature > -15){
+        } else if (weather.getTemp() > -15){
             selection = (db.COLUMN_TEMP_MAX + " < 1");
             selection += (" and " + db.COLUMN_TEMP_MIN + " > -16");
             //Шапка, теплые перчатки, шарф, куртка/пальто, термобелье, брюки, ботинки, футболка
@@ -124,15 +130,21 @@ public class Model implements LoaderManager.LoaderCallbacks<Cursor> {
         if (c.moveToFirst()) {
             int nameColIndex = c.getColumnIndex("name");
             int categoryColIndex = c.getColumnIndex("category");
+            int colorColIndex = c.getColumnIndex("color");
+
 
             do {
                 //Log.d(LOG_TAG, "name = " + c.getString(nameColIndex) + " category = " + c.getString(categoryColIndex));
+                String item = c.getString(nameColIndex);
+                if (!c.getString(colorColIndex).isEmpty()){
+                    item += "Цвет: " + c.getString(colorColIndex);
+                }
                 String category = c.getString(categoryColIndex);
                 if (clothes.containsKey(category)){
-                    clothes.get(category).add(c.getString(nameColIndex));
+                    clothes.get(category).add(item);
                 } else{
                     ArrayList<String> list = new ArrayList<>();
-                    list.add(c.getString(nameColIndex));
+                    list.add(item);
                     clothes.put(category, list);
                 }
 
@@ -147,7 +159,7 @@ public class Model implements LoaderManager.LoaderCallbacks<Cursor> {
             Log.d(LOG_TAG, stringArrayListEntry.getKey() + stringArrayListEntry.getValue());
         }
 
-        ArrayList<String> recomendations = new ArrayList<>();
+
 
         for(TreeMap.Entry e : clothes.entrySet()){
             ArrayList<String> list = (ArrayList) e.getValue();
@@ -177,6 +189,12 @@ public class Model implements LoaderManager.LoaderCallbacks<Cursor> {
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
     }
+
+    @Override
+    public void onLoad(Response response) {
+
+    }
+
 
     static class MyCursorLoader extends CursorLoader {
 

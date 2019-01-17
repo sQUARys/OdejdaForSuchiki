@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
         switch (response.type){
             case ResponseType.WTODAY:
                 Fact f = (Fact) response.response;
+
                 textView.setText(f.getTemp() + "");
                 break;
 

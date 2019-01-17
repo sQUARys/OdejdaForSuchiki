@@ -47,7 +47,7 @@ public class Recomendation extends AppCompatActivity implements View.OnClickList
         weather.wind = Integer.valueOf(etWind.getText().toString());
         weather.cloud = etCloud.getText().toString();
 
-        ArrayList<String> rec = model.getClothes(weather);
+        //ArrayList<String> rec = model.getClothes();
         /*
         for (String i : rec){
             Log.d(LOG_TAG, i);
