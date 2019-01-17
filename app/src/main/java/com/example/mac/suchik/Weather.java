@@ -1,24 +1,20 @@
 package com.example.mac.suchik;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
-import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.WeatherData;
 import com.google.gson.Gson;
 
-class Weather implements ResponseType {
+class Weather {
     private Request request;
     private String strResponse;
     private int type;
+    private Gson gson;
 
-    Weather(String lat, String lon) throws IOException {
+    Weather(String lat, String lon, Gson gson) throws IOException {
         Request request = new Request.Builder()
                 .url("https://api.weather.yandex.ru/v1/forecast?" + "lat=" + lat + "&lon=" + lon +
                         "&hours=false&extra=true")
@@ -26,9 +22,10 @@ class Weather implements ResponseType {
                 .build();
         this.request = request;
         this.strResponse = getResponse();
+        this.gson = gson;
     }
 
-    String getResponse() throws IOException {
+    private String getResponse() throws IOException {
         OkHttpClient client = new OkHttpClient();
         try (okhttp3.Response response = client.newCall(request).execute()) {
             return response.body().string();
@@ -37,7 +34,7 @@ class Weather implements ResponseType {
 
 
     Response parseWeather(){
-        Response response = new Response<>(ResponseType.GETW, (new Gson()).fromJson(strResponse, WeatherData.class));
+        Response response = new Response<>(ResponseType.GETW, gson.fromJson(strResponse, WeatherData.class));
         return response;
     }
 }
