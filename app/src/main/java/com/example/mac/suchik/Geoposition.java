@@ -44,13 +44,13 @@ public class Geoposition implements ResponseType{
                 return start();
             return new Response<Object>(ResponseType.GEOERROR, null);
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            return new Response<>(ResponseType.GGEOPOSITION, getLocation());
+            return getLocation();
         } else return new Response<Object>(ResponseType.GEOERROR, null);
 
     }
 
 
-    private String[] getLocation() {
+    private Response getLocation() {
         String[] position = new String[2];
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
@@ -86,11 +86,10 @@ public class Geoposition implements ResponseType{
 
             } else{
 
-                position[0] = "null";
-                position[1] = "null";
+                return new Response<Object>(ResponseType.GEOERROR, null);
 
             }}
-        return  position;
+        return new Response<>(ResponseType.GGEOPOSITION, position);
     }
 
     protected void buildAlertMessageNoGps() {

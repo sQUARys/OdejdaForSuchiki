@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mac.suchik.WeatherData.Fact;
+import com.example.mac.suchik.WeatherData.Forecasts;
 import com.example.mac.suchik.WeatherData.WeatherData;
 
 import org.json.JSONArray;
@@ -29,6 +30,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.OkHttpClient;
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
         textView = findViewById(R.id.text);
 
         storage = Storage.getOrCreate(MainActivity.this);
+
+        
 
         storage.subscribe(ResponseType.GETW, MainActivity.this);
         storage.subscribe(ResponseType.GGEOPOSITION, MainActivity.this);
@@ -71,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
                 break;
 
             case ResponseType.WFORECASTS:
-                WeatherData we = (WeatherData) response.response;
+                List<Forecasts> we = (List<Forecasts>) response.response;
                 textView.setText(we.toString());
                 break;
             case ResponseType.GEOERROR:
