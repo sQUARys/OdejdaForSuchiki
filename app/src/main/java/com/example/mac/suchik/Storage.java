@@ -27,7 +27,7 @@ public class Storage implements ResponseType, Callbacks{
         return _instance;
     }
 
-    private Storage(Context context){
+    Storage(Context context){
         this.gson = new Gson();
         geoposition = new Geoposition(context);
     }

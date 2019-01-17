@@ -7,4 +7,5 @@ public interface ResponseType {
     static final int GGEOPOSITION = 4;
     static final int ERROR = 5;
     static final int GEOERROR = 6;
+    static final int CLOTHES = 7;
 }
