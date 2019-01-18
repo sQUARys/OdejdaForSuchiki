@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
         textView1 = findViewById(R.id.text);
         textView2 = findViewById(R.id.text2);
         storage = Storage.getOrCreate(getApplicationContext());
+        
 
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
 //                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
