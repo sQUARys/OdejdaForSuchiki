@@ -53,14 +53,13 @@ public class Geoposition implements ResponseType{
     private Response getLocation() {
         String[] position = new String[2];
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
+                != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission
                 (mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
 
         }
         else{
-
             Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
             Location location1 = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
