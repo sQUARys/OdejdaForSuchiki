@@ -39,7 +39,7 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements Callbacks, ResponseType {
 
-    TextView textView;
+    TextView textView1, textView2;
     static Storage storage;
     String[] position;
 
@@ -47,19 +47,20 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textView = findViewById(R.id.text);
-
-        storage = Storage.getOrCreate(MainActivity.this);
+        textView1 = findViewById(R.id.text);
+        textView2 = findViewById(R.id.text2);
+        storage = Storage.getOrCreate(getApplicationContext());
 
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
 //                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
 //                (this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
 //            ActivityCompat.requestPermissions((Activity) this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);}
 
-        storage.subscribe(ResponseType.GETW, MainActivity.this);
+        storage.subscribe(ResponseType.WTODAY, MainActivity.this);
+        storage.subscribe(ResponseType.WFORECASTS, MainActivity.this);
         storage.subscribe(ResponseType.GGEOPOSITION, MainActivity.this);
+        (new TestTask()).execute();
 
-        storage.updatePosition();
 
     }
 
@@ -74,12 +75,13 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
         switch (response.type){
             case ResponseType.WTODAY:
                 Fact f = (Fact) response.response;
-                textView.setText(f.getTemp() + "");
+                String temp = f.getTemp() + "";
+                textView1.setText(String.format("%f", f.getTemp()));
                 break;
 
             case ResponseType.WFORECASTS:
                 List<Forecasts> we = (List<Forecasts>) response.response;
-                textView.setText(we.toString());
+                textView2.setText(we.toString());
                 break;
             case ResponseType.GEOERROR:
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -91,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
                             (this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                         storage.updatePosition();
                     else{
-                        Toast.makeText(this,"Ну и иди в баню, сыч", Toast.LENGTH_SHORT).show();
                         storage.setPosition("50", "50");
                     }
                 }

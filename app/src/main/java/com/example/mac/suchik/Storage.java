@@ -74,6 +74,8 @@ public class Storage implements ResponseType, Callbacks{
 
     @Override
     public void onLoad(Response response) {
+        if (response.response.getClass() == WeatherData.class)
+            this.response = (WeatherData) response.response;
         List<Callbacks> list = null;
         switch (response.type){
             case ResponseType.GETW:
@@ -91,11 +93,11 @@ public class Storage implements ResponseType, Callbacks{
                                         ((WeatherData) response.response).getForecasts()));
                                 break;
                             case ResponseType.WTODAY:
-                                callbacks.onLoad(new Response<>(i,
+                                callbacks.onLoad(new Response<>(ResponseType.WTODAY,
                                         ((WeatherData) response.response).getFact()));
                                 break;
                             case ResponseType.WFORECASTS:
-                                callbacks.onLoad(new Response<>(i,
+                                callbacks.onLoad(new Response<>(ResponseType.WFORECASTS,
                                         ((WeatherData) response.response).getForecasts()));
                                 break;
                         }
