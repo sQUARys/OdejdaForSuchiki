@@ -61,6 +61,12 @@ public class MainActivity extends AppCompatActivity implements Callbacks {
         storage.subscribe(ResponseType.WFORECASTS, MainActivity.this);
         storage.subscribe(ResponseType.GGEOPOSITION, MainActivity.this);
         storage.getWeatherToday();
+        storage.getWeatherToday();
+        storage.getWeatherToday();
+        storage.getWeatherToday();
+        storage.getWeatherToday();
+
+
 //                storage.updatePosition();
 //
 //                (new TestTask2()).execute();
