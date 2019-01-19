@@ -48,7 +48,7 @@ public class Storage implements ResponseType, Callbacks{
     }
 
     void getClothes(){
-        GetClothes clothes = getClothes.execute(weather);
+        //GetClothes clothes = getClothes.execute(response.getFact());
     }
 
     void setPosition(String lat, String lon){

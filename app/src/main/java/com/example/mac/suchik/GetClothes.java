@@ -57,6 +57,7 @@ public class GetClothes extends AsyncTask<Fact, Void, Response> implements Respo
         ArrayList<String> recomendations = new ArrayList<>();
 
 
+
         db = new DB(mContext);
         db.open();
         columns = new String[]{db.COLUMN_NAME, db.COLUMN_CATEGORY, db.COLUMN_COLOR};
