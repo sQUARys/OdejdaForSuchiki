@@ -67,6 +67,10 @@ public class Storage implements Callbacks{
     }
 
     void updateWeather(){
+        if (position[0] == null || position[1] == null){
+            updatePosition();
+            return;
+        }
         if ((Boolean) executed.get("GT"))
             getWeatherForecasts();
         else if ((Boolean) executed.get("GF"))
@@ -121,6 +125,10 @@ public class Storage implements Callbacks{
             if (response == null && !((Boolean) executed.get("GF"))){
                 updateWeather();
             } else{
+                if (position[0] == null || position[1] == null){
+                    updatePosition();
+                    return;
+                }
                 executed.put("GT", true);
                 onLoad(new Response<>(ResponseType.WTODAY, response.getFact()));
                 executed.put("GT", false);
@@ -133,6 +141,10 @@ public class Storage implements Callbacks{
             if (response == null && !((Boolean) executed.get("GT"))){
                 updateWeather();
             } else{
+                if (position[0] == null || position[1] == null){
+                    updatePosition();
+                    return;
+                }
                 executed.put("GF", true);
                 onLoad(new Response<>(ResponseType.WFORECASTS, response.getForecasts()));
                 executed.put("GF", false);
