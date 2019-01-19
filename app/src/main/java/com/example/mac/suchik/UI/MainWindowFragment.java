@@ -3,6 +3,7 @@ package com.example.mac.suchik.UI;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -75,7 +76,6 @@ public class MainWindowFragment extends Fragment implements Callbacks {
         weather_cloud = view.findViewById(R.id.weather_cloud);
         temperature = view.findViewById(R.id.temperature);
         weather_cloud__description = view.findViewById(R.id.weather_cloud__description);
-
         RecyclerView rv = view.findViewById(R.id.recommendation_list);
         rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         List<Clothe> data = new ArrayList<>();
@@ -84,9 +84,12 @@ public class MainWindowFragment extends Fragment implements Callbacks {
     }
 
     public void onWeatherDataUpdated(Fact weather) {
-        temperature.setText(String.format("%f", weather.getTemp()));
+        if(weather.getTemp() > 0)
+        temperature.setText(String.format("+" + "%f", weather.getTemp()));
+        else if (weather.getTemp() < 0)
+            temperature.setText(String.format("-" + "%f" , weather.getTemp()));
+        else temperature.setText("0");
     }
-
     @Override
     public void onLoad(Response response) {
         switch (response.type) {
@@ -100,4 +103,5 @@ public class MainWindowFragment extends Fragment implements Callbacks {
                 break;
         }
     }
+
 }

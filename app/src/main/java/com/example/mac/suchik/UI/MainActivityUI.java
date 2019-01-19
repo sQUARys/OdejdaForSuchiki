@@ -61,14 +61,15 @@ public class MainActivityUI extends AppCompatActivity {
     public void openFragment(int fragmentId) {
         Fragment fragment = null;
         switch (fragmentId) {
-//            case SCHEDULE_WINDOW_FRAGMENT:
-//                fragment = new Schedule();
-//                break;
-//            case MY_LIST:
-//                fragment = new TimeTable();
-//                break;
-//            case SETTINGS:
-//                fragment = new Settings();
+            case SCHEDULE_WINDOW_FRAGMENT:
+                fragment = new Schedule();
+                break;
+            case MY_LIST:
+                fragment = new TimeTable();
+                break;
+            case SETTINGS:
+                fragment = new Settings();
+                break;
             case MAIN_WINDOW_FRAGMENT:
             default:
                 fragment = new MainWindowFragment();
@@ -79,4 +80,5 @@ public class MainActivityUI extends AppCompatActivity {
                 .replace(R.id.container, fragment)
                 .commit();
     }
+
 }
