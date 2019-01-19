@@ -1,5 +1,6 @@
 package com.example.mac.suchik;
 
+import android.app.Application;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -25,8 +26,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.security.auth.callback.Callback;
 
-public class Model implements LoaderManager.LoaderCallbacks<Cursor>, Callbacks, ResponseType {
+public class Model extends Application implements ResponseType, Callbacks {
     private static Context mContext;
+    Callbacks callbacks;
 
     DB db;
 
@@ -40,17 +42,20 @@ public class Model implements LoaderManager.LoaderCallbacks<Cursor>, Callbacks, 
 
     final String LOG_TAG = "myLog";
 
-    public Model(Context mContext) {
-        this.mContext = mContext;
+    public Model(Callbacks callbacks) {
+        this.callbacks = callbacks;
+        this.mContext = getApplicationContext();
     }
 
 
 
 
-    public ArrayList<String> getClothes(Fact weather){
+    public Response getClothes(Fact weather){
         // открываем подключение к БД
 
         //Weather weather = getWeather();
+
+
 
         Log.d(LOG_TAG, "temp = " + weather.getTemp() + " rain = " + weather.getPrec_type() + " wind = " +
                 weather.getWind_speed() + " cloud = " + weather.getCloudness());
@@ -171,59 +176,11 @@ public class Model implements LoaderManager.LoaderCallbacks<Cursor>, Callbacks, 
             Log.d(LOG_TAG, recomendation);
         }
 
-        return recomendations;
-    }
-
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle bndl) {
-        return new AddItemActivity.MyCursorLoader(mContext, db);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-
-    }
-
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+        return new Response<>(ResponseType.CLOTHES, recomendations);
     }
 
     @Override
     public void onLoad(Response response) {
-
+        callbacks.onLoad(response);
     }
-
-
-    static class MyCursorLoader extends CursorLoader {
-
-        DB db;
-
-        public MyCursorLoader(Context context, DB db) {
-            super(context);
-            this.db = db;
-        }
-
-        @Override
-        public Cursor loadInBackground() {
-            Cursor cursor = db.getAllData();
-            try {
-                TimeUnit.SECONDS.sleep(3);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return cursor;
-        }
-
-    }
-
-
-    public class Weather{
-        public Integer temperature;
-        public String rain;
-        public Integer wind;
-        public String cloud;
-    }
-
 }
