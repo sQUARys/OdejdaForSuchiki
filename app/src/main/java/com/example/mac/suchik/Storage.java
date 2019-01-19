@@ -22,9 +22,9 @@ public class Storage implements Callbacks{
     private String[] position;
     private HashMap<Integer, List<Callbacks>> type_callback_rels = new LinkedHashMap<>();
     private Gson gson;
+    private Context mCtx;
     private SharedPreferences sp;
     private HashMap executed;
-    Context mCtx;
 
 
     private GetClothes getClothes;
@@ -41,8 +41,6 @@ public class Storage implements Callbacks{
 
     Storage(Context context){
         this.mCtx = context;
-        //this.getClothes = new GetClothes(context, Storage.this);
-        //getClothes.execute(new Fact());
         this.gson = new Gson();
         geoposition = new Geoposition(context);
         sp = context.getSharedPreferences(context.getString(R.string.weather_preferences), Context.MODE_PRIVATE);
@@ -84,7 +82,7 @@ public class Storage implements Callbacks{
     }
 
     void getClothes(){
-        //GetClothes clothes = getClothes.execute(weather);
+        new GetClothes(mCtx, Storage.this, response.getFact()).execute();
     }
 
     void setPosition(String lat, String lon){
