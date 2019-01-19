@@ -8,4 +8,5 @@ class ResponseType {
     static final int ERROR = 5;
     static final int GEOERROR = 6;
     static final int CLOTHES = 7;
+    static final int COMMUNITY = 8;
 }
