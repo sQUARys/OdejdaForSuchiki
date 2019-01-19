@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
-public class WrapperApi extends AsyncTask<Void, Void, Response> implements ResponseType{
+public class WrapperApi extends AsyncTask<Void, Void, Response>{
     private String lat, lon;
     private Callbacks callbacks;
     private Gson gson;

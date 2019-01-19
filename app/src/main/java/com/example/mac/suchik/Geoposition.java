@@ -17,7 +17,8 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 
-public class Geoposition implements ResponseType, LocationListener {
+
+public class Geoposition implements LocationListener {
     private static final int REQUEST_LOCATION = 1;
     private LocationManager locationManager;
     private static Context mContext;
