@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.security.auth.callback.Callback;
 
-public class GetClothes extends AsyncTask<Void, Void, Response> implements ResponseType {
+public class GetClothes extends AsyncTask<Void, Void, Response> {
 
     private static Context mContext;
     DB db;
