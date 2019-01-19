@@ -121,7 +121,7 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
             //Теплая шапка, варежки, теплый шарф, шуба/пуховик/теплая куртка, футболка, валенки/теплые ботинки, кофта, терфомбелье, теплые брюки
         }
 
-        Cursor c = db.getData(columns, selection, null, null, null, null);
+        Cursor c = db.getData("clothes", columns, selection, null, null, null, null);
 
         Log.d(LOG_TAG, "selection = " + selection);
 
