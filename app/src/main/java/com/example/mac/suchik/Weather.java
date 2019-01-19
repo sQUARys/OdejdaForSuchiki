@@ -8,7 +8,7 @@ import okhttp3.Request;
 import com.example.mac.suchik.WeatherData.WeatherData;
 import com.google.gson.Gson;
 
-class Weather implements ResponseType {
+class Weather {
     private Request request;
     private String strResponse;
     private int type;

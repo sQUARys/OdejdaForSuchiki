@@ -14,7 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
 
-public class Geoposition implements ResponseType{
+public class Geoposition{
     private static final int REQUEST_LOCATION = 1;
     private LocationManager locationManager;
     private static Context mContext;

@@ -24,7 +24,7 @@ import com.example.mac.suchik.WeatherData.WeatherData;
 
 import java.util.ArrayList;
 
-public class StartActivity extends AppCompatActivity implements View.OnClickListener, Callbacks, ResponseType {
+public class StartActivity extends AppCompatActivity implements View.OnClickListener, Callbacks {
 
     private static final int REQUEST_LOCATION = 1;
     Button button, buttonR, buttonA;
@@ -80,7 +80,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btn_recomendation:
                 //Log.d(LOG_TAG, "button 'get_recomendadion' was clicked");
                 storage.subscribe(ResponseType.WTODAY, StartActivity.this);
-                storage.getWeatherToday(new String[]{"43", "40"});
+                storage.getWeatherToday();
                 break;
 
         }

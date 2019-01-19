@@ -37,7 +37,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity implements Callbacks, ResponseType {
+public class MainActivity extends AppCompatActivity implements Callbacks {
 
     TextView textView1, textView2;
     static Storage storage;
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
         textView1 = findViewById(R.id.text);
         textView2 = findViewById(R.id.text2);
         storage = Storage.getOrCreate(getApplicationContext());
-        
+
 
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
 //                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
@@ -60,7 +60,11 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
         storage.subscribe(ResponseType.WTODAY, MainActivity.this);
         storage.subscribe(ResponseType.WFORECASTS, MainActivity.this);
         storage.subscribe(ResponseType.GGEOPOSITION, MainActivity.this);
-        (new TestTask()).execute();
+        storage.getWeatherToday();
+//                storage.updatePosition();
+//
+//                (new TestTask2()).execute();
+//        (new TestTask()).execute();
 
 
     }
@@ -69,7 +73,9 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
     protected void onStop() {
         super.onStop();
         storage.unsubscribe(MainActivity.this);
+        storage.saveData();
     }
+
 
     @Override
     public void onLoad(com.example.mac.suchik.Response response) {
@@ -101,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements Callbacks, Respon
                 break;
             case ResponseType.GGEOPOSITION:
                 position = (String[]) response.response;
-                storage.getWeatherToday(position);
                 break;
         }
     }
