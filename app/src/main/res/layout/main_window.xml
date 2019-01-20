@@ -6,24 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UI.MainActivityUI"
-    android:background="@color/backgroundcolor  "
+    android:background="@color/backgroundcolor"
     android:visibility="visible">
 
     <TextView
-        android:id="@+id/time"
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="18:10"
         android:textColor="#000"
-        android:textSize="70dp" />
+        android:textSize="40dp" />
 
     <TextView
         android:id="@+id/city_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="286dp"
-        android:layout_marginTop="-95dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="85dp"
         android:text="Loading"
         android:textColor="#000"
         android:textSize="35sp" />
@@ -37,12 +36,14 @@
         android:src="@drawable/cloud" />
 
     <TextView
+        android:id="@+id/right_now"
         android:layout_width="170dp"
         android:layout_height="wrap_content"
+        android:layout_below="@id/date"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="214dp"
         android:text="Сейчас"
-        android:layout_below="@id/time"
         android:textAlignment="center"
-        android:id="@+id/right_now"
         android:textColor="#000"
         android:textSize="25sp" />
 
@@ -63,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="125dp"
         android:layout_marginTop="-1dp"
-        android:layout_toEndOf="@+id/time"
+        android:layout_toEndOf="@+id/date"
         android:text="CLoudly" />
 
     <android.support.v7.widget.RecyclerView
