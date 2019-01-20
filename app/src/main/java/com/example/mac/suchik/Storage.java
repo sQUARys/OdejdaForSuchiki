@@ -85,6 +85,10 @@ public class Storage implements Callbacks{
         updateWeather();
     }
 
+    void getCurrentCommunity(){
+        new Community(mCtx, position,Storage.this).execute();
+    }
+
     void getClothes(){
         new GetClothes(mCtx, Storage.this, response.getFact()).execute();
     }
@@ -220,6 +224,14 @@ public class Storage implements Callbacks{
             case ResponseType.CLOTHES:
                 if (type_callback_rels.get(ResponseType.CLOTHES) == null)
                     type_callback_rels.put(ResponseType.CLOTHES, new ArrayList<Callbacks>());
+                list = type_callback_rels.get(ResponseType.CLOTHES);
+                for (Callbacks callbacks: list) {
+                    callbacks.onLoad(response);
+                }
+                break;
+            case ResponseType.COMMUNITY:
+                if (type_callback_rels.get(ResponseType.COMMUNITY) == null)
+                    type_callback_rels.put(ResponseType.COMMUNITY, new ArrayList<Callbacks>());
                 list = type_callback_rels.get(ResponseType.CLOTHES);
                 for (Callbacks callbacks: list) {
                     callbacks.onLoad(response);
