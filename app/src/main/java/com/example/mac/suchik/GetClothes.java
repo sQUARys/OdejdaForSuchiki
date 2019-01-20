@@ -9,12 +9,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
-
-import com.example.mac.suchik.Callbacks;
-import com.example.mac.suchik.MainActivity;
-import com.example.mac.suchik.Response;
-import com.example.mac.suchik.ResponseType;
-import com.example.mac.suchik.Storage;
 import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.WeatherData;
 
@@ -121,7 +115,7 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
             //Теплая шапка, варежки, теплый шарф, шуба/пуховик/теплая куртка, футболка, валенки/теплые ботинки, кофта, терфомбелье, теплые брюки
         }
 
-        Cursor c = db.getData(columns, selection, null, null, null, null);
+        Cursor c = db.getData("clothes", columns, selection, null, null, null, null);
 
         Log.d(LOG_TAG, "selection = " + selection);
 

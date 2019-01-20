@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,6 +18,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 
 public class Geoposition implements LocationListener {
@@ -160,6 +165,34 @@ public class Geoposition implements LocationListener {
                 });
         final AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void get_community(String[] location){
+        double lat = Double.valueOf(location[0]);
+        double lng = Double.valueOf(location[1]);
+
+        Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder(
+                        "Адрес:\n");
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress
+                            .append(returnedAddress.getAddressLine(i)).append(
+                            "\n");
+                }
+                Log.d("Community", strReturnedAddress.toString());
+            } else {
+                Log.d("Community","Нет адресов!");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
