@@ -14,7 +14,6 @@ import java.util.Objects;
 
 public class Storage implements Callbacks{
     private WeatherData response;
-    private Geoposition geoposition;
     private String[] position;
     private HashMap<Integer, List<Callbacks>> type_callback_rels = new LinkedHashMap<>();
     private Gson gson;
@@ -38,7 +37,7 @@ public class Storage implements Callbacks{
     Storage(Context context){
         this.mCtx = context;
         this.gson = new Gson();
-        geoposition = new Geoposition(context);
+
         sp = context.getSharedPreferences(context.getString(R.string.weather_preferences), Context.MODE_PRIVATE);
         executed = new HashMap<String, Boolean> (){{
                 put("GG", false);
@@ -46,23 +45,22 @@ public class Storage implements Callbacks{
                 put("GF", false);
                 put("GC", false);
         }};
-        if (response == null && !Objects.equals(sp.getString("weather", null), "null")){
+        if (!Objects.equals(sp.getString("weather", null), null)){
             onLoad(new Response<>(ResponseType.GETW,
                     gson.fromJson(sp.getString("weather", null),
                             WeatherData.class)));
         }
-        if (response == null && !Objects.equals(sp.getString("pos_lat",
-                null), "null") &&
-                response == null && !Objects.equals(sp.getString("pos_lon",
-                null), "null")){
-            setPosition(sp.getString("pos_lat", null),
-                    sp.getString("pos_lon", null));
+        if (!Objects.equals(sp.getString("pos_lat",
+                null), null) && !Objects.equals(sp.getString("pos_lon",
+                null), null)){
+            position = new String[]{sp.getString("pos_lat",
+                    null), sp.getString("pos_lon",
+                    null)};
         }
     }
 
     public void updateWeather(){
         if (position[0] == null || position[1] == null){
-            updatePosition();
             return;
         }
         if ((Boolean) executed.get("GT"))
@@ -74,27 +72,25 @@ public class Storage implements Callbacks{
             new WrapperApi(position[0], position[1], Storage.this, gson).execute();
             executed.putAll(new HashMap(){{put("GT", false); put("GF", false);}});
         }
+        //getClothes();
     }
 
-   public void updatePosition(){
-        onLoad(geoposition.start());
-        updateWeather();
-    }
 
     public void getCurrentCommunity(){
-        new Community(mCtx, position,Storage.this).execute();
+        if (position == null) {
+        } else
+            new Community(mCtx, position,Storage.this).execute();
     }
 
     public void getClothes(){
         new GetClothes(mCtx, Storage.this, response.getFact()).execute();
     }
 
-    void setPosition(String lat, String lon){
+    public void setPosition(String lat, String lon){
         if (!(Boolean) executed.get("GG")) {
             executed.put("GG", true);
             onLoad(new Response<>(ResponseType.GGEOPOSITION, new String[]{lat, lon}));
             executed.put("GG", false);
-            updateWeather();
         }
     }
 
@@ -124,7 +120,6 @@ public class Storage implements Callbacks{
                 updateWeather();
             } else{
                 if (this.position[0] == null || this.position[1] == null){
-                    updatePosition();
                     return;
                 }
                 executed.put("GT", true);
@@ -140,7 +135,6 @@ public class Storage implements Callbacks{
                 updateWeather();
             } else{
                 if (position[0] == null || position[1] == null){
-                    updatePosition();
                     return;
                 }
                 executed.put("GF", true);
@@ -200,6 +194,8 @@ public class Storage implements Callbacks{
                 break;
             case ResponseType.GGEOPOSITION:
                 this.position = (String[]) response.response;
+                updateWeather();
+                getCurrentCommunity();
                 if (type_callback_rels.get(ResponseType.GGEOPOSITION) == null)
                     type_callback_rels.put(ResponseType.GGEOPOSITION, new ArrayList<Callbacks>());
                 list = type_callback_rels.get(ResponseType.GGEOPOSITION);
@@ -228,7 +224,7 @@ public class Storage implements Callbacks{
             case ResponseType.COMMUNITY:
                 if (type_callback_rels.get(ResponseType.COMMUNITY) == null)
                     type_callback_rels.put(ResponseType.COMMUNITY, new ArrayList<Callbacks>());
-                list = type_callback_rels.get(ResponseType.CLOTHES);
+                list = type_callback_rels.get(ResponseType.COMMUNITY);
                 for (Callbacks callbacks: list) {
                     callbacks.onLoad(response);
                 }
