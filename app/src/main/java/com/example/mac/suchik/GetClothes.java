@@ -9,12 +9,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
-
-import com.example.mac.suchik.Callbacks;
-import com.example.mac.suchik.MainActivity;
-import com.example.mac.suchik.Response;
-import com.example.mac.suchik.ResponseType;
-import com.example.mac.suchik.Storage;
 import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.WeatherData;
 
