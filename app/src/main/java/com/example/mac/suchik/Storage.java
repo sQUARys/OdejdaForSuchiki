@@ -20,7 +20,7 @@ public class Storage implements Callbacks{
     private Gson gson;
     private Context mCtx;
     private SharedPreferences sp;
-    private HashMap executed;
+    private HashMap<String, Boolean> executed;
 
 
     private GetClothes getClothes;
@@ -65,9 +65,9 @@ public class Storage implements Callbacks{
             updatePosition();
             return;
         }
-        if ((Boolean) executed.get("GT"))
+        if (executed.get("GT"))
             getWeatherForecasts();
-        else if ((Boolean) executed.get("GF"))
+        else if (executed.get("GF"))
             getWeatherToday();
         else {
             executed.putAll(new HashMap(){{put("GT", true); put("GF", true);}});
@@ -77,7 +77,7 @@ public class Storage implements Callbacks{
     }
 
     void updatePosition(){
-        if (! (Boolean) executed.get("GG")) {
+        if (!executed.get("GG")) {
             executed.put("GG", true);
             onLoad(geoposition.start());
             executed.put("GG", false);
@@ -94,7 +94,7 @@ public class Storage implements Callbacks{
     }
 
     void setPosition(String lat, String lon){
-        if (!(Boolean) executed.get("GG")) {
+        if (!executed.get("GG")) {
             executed.put("GG", true);
             onLoad(new Response<>(ResponseType.GGEOPOSITION, new String[]{lat, lon}));
             executed.put("GG", false);
@@ -123,8 +123,8 @@ public class Storage implements Callbacks{
     }
 
    public void getWeatherToday(){
-        if (!(Boolean) executed.get("GT")){
-            if (response == null && !((Boolean) executed.get("GF"))){
+        if (!executed.get("GT")){
+            if (response == null && !executed.get("GF")){
                 updateWeather();
             } else{
                 if (this.position == null || this.position[0] == null || this.position[1] == null){
@@ -139,8 +139,8 @@ public class Storage implements Callbacks{
     }
 
     void getWeatherForecasts() {
-        if (!(Boolean) executed.get("GF")){
-            if (response == null && !((Boolean) executed.get("GT"))){
+        if (! executed.get("GF")){
+            if (response == null && !executed.get("GT")){
                 updateWeather();
             } else{
                 if (position == null || position[0] == null || position[1] == null){
