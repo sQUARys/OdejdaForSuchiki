@@ -68,7 +68,7 @@ public class Storage implements Callbacks{
         if ((Boolean) executed.get("GT"))
             getWeatherForecasts();
         else if ((Boolean) executed.get("GF"))
-            getWeatherToday(position);
+            getWeatherToday();
         else {
             executed.putAll(new HashMap(){{put("GT", true); put("GF", true);}});
             new WrapperApi(position[0], position[1], Storage.this, gson).execute();
