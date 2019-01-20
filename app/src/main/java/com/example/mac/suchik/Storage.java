@@ -122,7 +122,7 @@ public class Storage implements Callbacks{
         }
     }
 
-   public  void getWeatherToday(String[] position){
+   public void getWeatherToday(){
         if (!(Boolean) executed.get("GT")){
             if (response == null && !((Boolean) executed.get("GF"))){
                 updateWeather();
