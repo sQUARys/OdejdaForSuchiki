@@ -6,11 +6,13 @@ import android.content.SharedPreferences;
 import com.example.mac.suchik.WeatherData.WeatherData;
 import com.google.gson.Gson;
 
+import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class Storage implements Callbacks{
     private WeatherData response;
@@ -20,7 +22,7 @@ public class Storage implements Callbacks{
     private Gson gson;
     private Context mCtx;
     private SharedPreferences sp;
-    private HashMap executed;
+    private HashMap<String, Boolean> executed;
 
 
     private GetClothes getClothes;
@@ -60,29 +62,34 @@ public class Storage implements Callbacks{
         }
     }
 
-    void updateWeather(){
+    public void updateWeather(boolean is_blocked){
         if (position == null || position[0] == null || position[1] == null){
             updatePosition();
             return;
         }
-        if ((Boolean) executed.get("GT"))
-            getWeatherForecasts();
-        else if ((Boolean) executed.get("GF"))
-            getWeatherToday(position);
+        WrapperApi request = new WrapperApi(position[0], position[1], Storage.this, gson);
+        request.execute();
+        try {
+            request.get();
+        } catch (ExecutionException | InterruptedException e) {
+            onLoad(new Response<>(ResponseType.ERROR, null));
+        }
+        if (executed.get("GT"))
+            executed.put("GF", true);
+        else if (executed.get("GF"))
+            executed.put("GT", true);
         else {
             executed.putAll(new HashMap(){{put("GT", true); put("GF", true);}});
-            new WrapperApi(position[0], position[1], Storage.this, gson).execute();
-            executed.putAll(new HashMap(){{put("GT", false); put("GF", false);}});
         }
     }
 
-    void updatePosition(){
-        if (! (Boolean) executed.get("GG")) {
+    public void updatePosition(){
+        if (!executed.get("GG")) {
             executed.put("GG", true);
             onLoad(geoposition.start());
             executed.put("GG", false);
         }
-        updateWeather();
+        updateWeather(false);
     }
 
     public void getCurrentCommunity(){
@@ -93,12 +100,12 @@ public class Storage implements Callbacks{
         new GetClothes(mCtx, Storage.this, response.getFact()).execute();
     }
 
-    void setPosition(String lat, String lon){
-        if (!(Boolean) executed.get("GG")) {
+    public void setPosition(String lat, String lon){
+        if (!executed.get("GG")) {
             executed.put("GG", true);
             onLoad(new Response<>(ResponseType.GGEOPOSITION, new String[]{lat, lon}));
             executed.put("GG", false);
-            updateWeather();
+            updateWeather(false);
         }
     }
 
@@ -115,17 +122,22 @@ public class Storage implements Callbacks{
     }
 
     public void saveData(){
+        SharedPreferences.Editor editor = sp.edit();
         if (response != null){
-            SharedPreferences.Editor editor = sp.edit();
             editor.putString("weather", gson.toJson(response));
             editor.apply();
         }
+        if (position != null && position[0] != null && position[1] != null)
+        {
+            editor.putString("pos_lat", position[0]);
+            editor.putString("pos_lon", position[1]);
+        }
     }
 
-   public  void getWeatherToday(String[] position){
-        if (!(Boolean) executed.get("GT")){
-            if (response == null && !((Boolean) executed.get("GF"))){
-                updateWeather();
+    public void getWeatherToday(){
+        if (!executed.get("GT")){
+            if (response == null && !executed.get("GF")){
+                updateWeather(false);
             } else{
                 if (this.position == null || this.position[0] == null || this.position[1] == null){
                     updatePosition();
@@ -138,10 +150,10 @@ public class Storage implements Callbacks{
         }
     }
 
-    void getWeatherForecasts() {
-        if (!(Boolean) executed.get("GF")){
-            if (response == null && !((Boolean) executed.get("GT"))){
-                updateWeather();
+    public void getWeatherForecasts() {
+        if (! executed.get("GF")){
+            if (response == null && !executed.get("GT")){
+                updateWeather(false);
             } else{
                 if (position == null || position[0] == null || position[1] == null){
                     updatePosition();
@@ -237,6 +249,9 @@ public class Storage implements Callbacks{
                     callbacks.onLoad(response);
                 }
                 break;
+        }
+        if (response.type == ResponseType.GETW){
+            executed.putAll(new HashMap(){{put("GT", false); put("GF", false);}});
         }
     }
 }
