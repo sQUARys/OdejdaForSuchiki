@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Delete</string>
+    <string name="weather_preferences">weather</string>
 </resources>

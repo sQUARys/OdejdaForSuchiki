@@ -23,7 +23,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="85dp"
-        android:text="Loading"
         android:textColor="#000"
         android:textSize="35sp" />
 
@@ -32,20 +31,8 @@
         android:id="@+id/weather_cloud"
         android:layout_width="170sp"
         android:layout_height="150sp"
-        android:layout_below="@+id/right_now"
+        android:layout_below="@+id/date"
         android:src="@drawable/cloud" />
-
-    <TextView
-        android:id="@+id/right_now"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/date"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="214dp"
-        android:text="Сейчас"
-        android:textAlignment="center"
-        android:textColor="#000"
-        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/temperature"
@@ -57,15 +44,6 @@
         android:layout_marginLeft="45dp"
         android:textColor="#000"
         android:textSize="40sp" />
-
-    <TextView
-        android:id="@+id/weather_cloud__description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="125dp"
-        android:layout_marginTop="-1dp"
-        android:layout_toEndOf="@+id/date"
-        android:text="CLoudly" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recommendation_list"

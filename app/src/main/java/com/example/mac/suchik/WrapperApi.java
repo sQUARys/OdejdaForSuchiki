@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
-public class WrapperApi extends AsyncTask<Void, Void, Response> {
+public class WrapperApi extends AsyncTask<Void, Void, Response>{
     private String lat, lon;
     private Callbacks callbacks;
     private Gson gson;
@@ -24,7 +24,7 @@ public class WrapperApi extends AsyncTask<Void, Void, Response> {
         boolean flag = true;
         while (flag){
             try {
-                weather = new Weather(lat , lon, gson);
+                weather = new Weather(lat, lon, gson);
                 flag = false;
             } catch (IOException e) {
                 flag = true;

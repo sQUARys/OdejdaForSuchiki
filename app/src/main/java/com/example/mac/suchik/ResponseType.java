@@ -7,4 +7,6 @@ public class ResponseType {
     public static final int GGEOPOSITION = 4;
     public static final int ERROR = 5;
     public static final int GEOERROR = 6;
+    public static final int CLOTHES = 7;
+    public static final int COMMUNITY = 8;
 }
