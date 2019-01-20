@@ -2,18 +2,14 @@ package com.example.mac.suchik;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.BoringLayout;
-import android.util.Log;
 
 import com.example.mac.suchik.WeatherData.WeatherData;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class Storage implements Callbacks{
@@ -45,10 +41,10 @@ public class Storage implements Callbacks{
         geoposition = new Geoposition(context);
         sp = context.getSharedPreferences(context.getString(R.string.weather_preferences), Context.MODE_PRIVATE);
         executed = new HashMap<String, Boolean> (){{
-                put("GG", false);
-                put("GT", false);
-                put("GF", false);
-                put("GC", false);
+            put("GG", false);
+            put("GT", false);
+            put("GF", false);
+            put("GC", false);
         }};
         if (response == null && !Objects.equals(sp.getString("weather", null), "null")){
             onLoad(new Response<>(ResponseType.GETW,
@@ -65,14 +61,14 @@ public class Storage implements Callbacks{
     }
 
     void updateWeather(){
-        if (position[0] == null || position[1] == null){
+        if (position == null || position[0] == null || position[1] == null){
             updatePosition();
             return;
         }
         if ((Boolean) executed.get("GT"))
             getWeatherForecasts();
         else if ((Boolean) executed.get("GF"))
-            getWeatherToday();
+            getWeatherToday(position);
         else {
             executed.putAll(new HashMap(){{put("GT", true); put("GF", true);}});
             new WrapperApi(position[0], position[1], Storage.this, gson).execute();
@@ -81,11 +77,19 @@ public class Storage implements Callbacks{
     }
 
     void updatePosition(){
-        onLoad(geoposition.start());
+        if (! (Boolean) executed.get("GG")) {
+            executed.put("GG", true);
+            onLoad(geoposition.start());
+            executed.put("GG", false);
+        }
         updateWeather();
     }
 
-    void getClothes(){
+    public void getCurrentCommunity(){
+        new Community(mCtx, position,Storage.this).execute();
+    }
+
+    public void getClothes(){
         new GetClothes(mCtx, Storage.this, response.getFact()).execute();
     }
 
@@ -98,19 +102,19 @@ public class Storage implements Callbacks{
         }
     }
 
-    void subscribe(int type, Callbacks callbacks){
+    public void subscribe(int type, Callbacks callbacks){
         if (type_callback_rels.get(type) == null) type_callback_rels.put(type,
                 new ArrayList<Callbacks>());
         type_callback_rels.get(type).add(callbacks);
     }
-    void unsubscribe(Callbacks callbacks){
+    public void unsubscribe(Callbacks callbacks){
         for (List<Callbacks> callbacks1: type_callback_rels.values()){
             if (callbacks1.contains(callbacks))
                 callbacks1.remove(callbacks1.indexOf(callbacks));
         }
     }
 
-    void saveData(){
+    public void saveData(){
         if (response != null){
             SharedPreferences.Editor editor = sp.edit();
             editor.putString("weather", gson.toJson(response));
@@ -118,12 +122,12 @@ public class Storage implements Callbacks{
         }
     }
 
-    void getWeatherToday(){
+   public  void getWeatherToday(String[] position){
         if (!(Boolean) executed.get("GT")){
             if (response == null && !((Boolean) executed.get("GF"))){
                 updateWeather();
             } else{
-                if (position[0] == null || position[1] == null){
+                if (this.position == null || this.position[0] == null || this.position[1] == null){
                     updatePosition();
                     return;
                 }
@@ -139,7 +143,7 @@ public class Storage implements Callbacks{
             if (response == null && !((Boolean) executed.get("GT"))){
                 updateWeather();
             } else{
-                if (position[0] == null || position[1] == null){
+                if (position == null || position[0] == null || position[1] == null){
                     updatePosition();
                     return;
                 }
@@ -220,6 +224,14 @@ public class Storage implements Callbacks{
             case ResponseType.CLOTHES:
                 if (type_callback_rels.get(ResponseType.CLOTHES) == null)
                     type_callback_rels.put(ResponseType.CLOTHES, new ArrayList<Callbacks>());
+                list = type_callback_rels.get(ResponseType.CLOTHES);
+                for (Callbacks callbacks: list) {
+                    callbacks.onLoad(response);
+                }
+                break;
+            case ResponseType.COMMUNITY:
+                if (type_callback_rels.get(ResponseType.COMMUNITY) == null)
+                    type_callback_rels.put(ResponseType.COMMUNITY, new ArrayList<Callbacks>());
                 list = type_callback_rels.get(ResponseType.CLOTHES);
                 for (Callbacks callbacks: list) {
                     callbacks.onLoad(response);

@@ -125,13 +125,13 @@ public class DB {
     }
 
     // получить все данные из таблицы DB_TABLE
-    public Cursor getAllData() {
-        return mDB.query(DB_TABLE, null, null, null, null, null, null);
+    public Cursor getAllData(String name) {
+        return mDB.query(name, null, null, null, null, null, null);
     }
 
     // получить данные из таблицы DB_TABLE
-    public Cursor getData(String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
-        return mDB.query(DB_TABLE, columns, selection, selectionArgs, groupBy, having, orderBy);
+    public Cursor getData(String name, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
+        return mDB.query(name, columns, selection, selectionArgs, groupBy, having, orderBy);
     }
 
 
