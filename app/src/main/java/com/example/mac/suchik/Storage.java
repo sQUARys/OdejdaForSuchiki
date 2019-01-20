@@ -76,7 +76,7 @@ public class Storage implements Callbacks{
         }
     }
 
-    void updatePosition(){
+    public void updatePosition(){
         if (!executed.get("GG")) {
             executed.put("GG", true);
             onLoad(geoposition.start());
@@ -93,7 +93,7 @@ public class Storage implements Callbacks{
         new GetClothes(mCtx, Storage.this, response.getFact()).execute();
     }
 
-    void setPosition(String lat, String lon){
+    public void setPosition(String lat, String lon){
         if (!executed.get("GG")) {
             executed.put("GG", true);
             onLoad(new Response<>(ResponseType.GGEOPOSITION, new String[]{lat, lon}));
@@ -138,7 +138,7 @@ public class Storage implements Callbacks{
         }
     }
 
-    void getWeatherForecasts() {
+    public void getWeatherForecasts() {
         if (! executed.get("GF")){
             if (response == null && !executed.get("GT")){
                 updateWeather();
