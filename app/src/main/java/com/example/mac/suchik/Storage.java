@@ -63,6 +63,10 @@ public class Storage implements Callbacks{
         }
     }
 
+    public WeatherData getResponse() {
+        return response;
+    }
+
     public void updateWeather(boolean is_blocked){
         if (position != null && position[0] != null && position[1] != null) {
             WrapperApi request = new WrapperApi(position[0], position[1], Storage.this, gson);
@@ -72,6 +76,7 @@ public class Storage implements Callbacks{
             } catch (ExecutionException | InterruptedException e) {
                 onLoad(new Response<>(ResponseType.ERROR, null));
             }
+
             if (executed.get("GT"))
                 executed.put("GF", true);
             else if (executed.get("GF"))
