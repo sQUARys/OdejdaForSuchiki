@@ -176,6 +176,7 @@ public class MainWindowFragment extends Fragment implements Callbacks {
                 city_name.setText(city);
                 break;
             case ResponseType.WFORECASTS:
+                rv.setList()
                 break;
             case ResponseType.GEOERROR:
                 mStorage.setPosition("50", "50");

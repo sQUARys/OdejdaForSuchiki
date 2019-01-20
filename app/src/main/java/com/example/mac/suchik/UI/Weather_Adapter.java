@@ -35,4 +35,9 @@ public class Weather_Adapter extends RecyclerView.Adapter<VH> {
     public int getItemCount() {
         return mData.size();
     }
+    public void setList(List<Forecasts> new_elements){
+        mData.clear();
+        mData.addAll(new_elements);
+        notifyDataSetChanged();
+    }
 }
