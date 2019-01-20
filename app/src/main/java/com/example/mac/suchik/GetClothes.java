@@ -9,12 +9,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
-
-import com.example.mac.suchik.Callbacks;
-import com.example.mac.suchik.MainActivity;
-import com.example.mac.suchik.Response;
-import com.example.mac.suchik.ResponseType;
-import com.example.mac.suchik.Storage;
 import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.WeatherData;
 
@@ -26,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.security.auth.callback.Callback;
 
-public class GetClothes extends AsyncTask<Fact, Void, Response> implements ResponseType {
+public class GetClothes extends AsyncTask<Void, Void, Response> {
 
     private static Context mContext;
     DB db;
@@ -49,12 +43,14 @@ public class GetClothes extends AsyncTask<Fact, Void, Response> implements Respo
 
 
     @Override
-    protected Response doInBackground(Fact... voids) {
+    protected Response doInBackground(Void... voids) {
+
 
         Log.d(LOG_TAG, "temp = " + weather.getTemp() + " rain = " + weather.getPrec_type() + " wind = " +
                 weather.getWind_speed() + " cloud = " + weather.getCloudness());
 
-        ArrayList<String> recomendations = new ArrayList<>();
+        ArrayList<String> recommendations = new ArrayList<>();
+
 
 
         db = new DB(mContext);
@@ -79,7 +75,7 @@ public class GetClothes extends AsyncTask<Fact, Void, Response> implements Respo
                     selection += (" and " + db.COLUMN_WIND + " > 0");
                     if (weather.getCloudness() == 0) { // Облачность
                         selection += (" and " + db.COLUMN_CLOUD + " > 0");
-                        recomendations.add("Наденьте светлую одежду");
+                        recommendations.add("Наденьте светлую одежду");
                     }
                     // Кепка/шляпа, ветровка, легкие брюки/шорты/юбка, футболка, кроссовки/сандалии, солнечные очки
                 } else {
@@ -119,7 +115,7 @@ public class GetClothes extends AsyncTask<Fact, Void, Response> implements Respo
             //Теплая шапка, варежки, теплый шарф, шуба/пуховик/теплая куртка, футболка, валенки/теплые ботинки, кофта, терфомбелье, теплые брюки
         }
 
-        Cursor c = db.getData(columns, selection, null, null, null, null);
+        Cursor c = db.getData("clothes", columns, selection, null, null, null, null);
 
         Log.d(LOG_TAG, "selection = " + selection);
 
@@ -163,13 +159,13 @@ public class GetClothes extends AsyncTask<Fact, Void, Response> implements Respo
         for (TreeMap.Entry e : clothes.entrySet()) {
             ArrayList<String> list = (ArrayList) e.getValue();
             int rnd = new Random().nextInt(list.size());
-            recomendations.add(list.get(rnd));
+            recommendations.add(list.get(rnd));
         }
         Log.d(LOG_TAG, "RESULT:");
-        for (String recomendation : recomendations) {
-            Log.d(LOG_TAG, recomendation);
+        for (String recommendation : recommendations) {
+            Log.d(LOG_TAG, recommendation);
         }
-        return new Response<>(ResponseType.CLOTHES, recomendations);
+        return new Response<>(ResponseType.CLOTHES, recommendations);
     }
 
     @Override
