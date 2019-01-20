@@ -41,10 +41,10 @@ public class Storage implements Callbacks{
         geoposition = new Geoposition(context);
         sp = context.getSharedPreferences(context.getString(R.string.weather_preferences), Context.MODE_PRIVATE);
         executed = new HashMap<String, Boolean> (){{
-                put("GG", false);
-                put("GT", false);
-                put("GF", false);
-                put("GC", false);
+            put("GG", false);
+            put("GT", false);
+            put("GF", false);
+            put("GC", false);
         }};
         if (response == null && !Objects.equals(sp.getString("weather", null), "null")){
             onLoad(new Response<>(ResponseType.GETW,
@@ -60,8 +60,8 @@ public class Storage implements Callbacks{
         }
     }
 
-    public void updateWeather(){
-        if (position[0] == null || position[1] == null){
+    void updateWeather(){
+        if (position == null || position[0] == null || position[1] == null){
             updatePosition();
             return;
         }
@@ -76,8 +76,12 @@ public class Storage implements Callbacks{
         }
     }
 
-   public void updatePosition(){
-        onLoad(geoposition.start());
+    void updatePosition(){
+        if (! (Boolean) executed.get("GG")) {
+            executed.put("GG", true);
+            onLoad(geoposition.start());
+            executed.put("GG", false);
+        }
         updateWeather();
     }
 
@@ -123,7 +127,7 @@ public class Storage implements Callbacks{
             if (response == null && !((Boolean) executed.get("GF"))){
                 updateWeather();
             } else{
-                if (this.position[0] == null || this.position[1] == null){
+                if (this.position == null || this.position[0] == null || this.position[1] == null){
                     updatePosition();
                     return;
                 }
@@ -139,7 +143,7 @@ public class Storage implements Callbacks{
             if (response == null && !((Boolean) executed.get("GT"))){
                 updateWeather();
             } else{
-                if (position[0] == null || position[1] == null){
+                if (position == null || position[0] == null || position[1] == null){
                     updatePosition();
                     return;
                 }
