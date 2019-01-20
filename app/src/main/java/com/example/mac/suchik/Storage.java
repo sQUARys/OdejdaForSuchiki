@@ -115,10 +115,15 @@ public class Storage implements Callbacks{
     }
 
     public void saveData(){
+        SharedPreferences.Editor editor = sp.edit();
         if (response != null){
-            SharedPreferences.Editor editor = sp.edit();
             editor.putString("weather", gson.toJson(response));
             editor.apply();
+        }
+        if (position != null && position[0] != null && position[1] != null)
+        {
+            editor.putString("pos_lat", position[0]);
+            editor.putString("pos_lon", position[1]);
         }
     }
 
