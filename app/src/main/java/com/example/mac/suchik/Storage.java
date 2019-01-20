@@ -64,31 +64,24 @@ public class Storage implements Callbacks{
     }
 
     public void updateWeather(boolean is_blocked){
-        if (position == null || position[0] == null || position[1] == null){
-            updatePosition();
-            return;
-        }
-        WrapperApi request = new WrapperApi(position[0], position[1], Storage.this, gson);
-        request.execute();
-        try {
-            request.get();
-        } catch (ExecutionException | InterruptedException e) {
-            onLoad(new Response<>(ResponseType.ERROR, null));
-        }
-        if (executed.get("GT"))
-            executed.put("GF", true);
-        else if (executed.get("GF"))
-            executed.put("GT", true);
-        else {
-            executed.putAll(new HashMap(){{put("GT", true); put("GF", true);}});
-        }
-    }
-
-    public void updatePosition(){
-        if (!executed.get("GG")) {
-            executed.put("GG", true);
-            onLoad(geoposition.start());
-            executed.put("GG", false);
+        if (position != null && position[0] != null && position[1] != null) {
+            WrapperApi request = new WrapperApi(position[0], position[1], Storage.this, gson);
+            request.execute();
+            try {
+                request.get();
+            } catch (ExecutionException | InterruptedException e) {
+                onLoad(new Response<>(ResponseType.ERROR, null));
+            }
+            if (executed.get("GT"))
+                executed.put("GF", true);
+            else if (executed.get("GF"))
+                executed.put("GT", true);
+            else {
+                executed.putAll(new HashMap() {{
+                    put("GT", true);
+                    put("GF", true);
+                }});
+            }
         }
     }
 
@@ -149,7 +142,7 @@ public class Storage implements Callbacks{
             if (response == null && !executed.get("GF")){
                 updateWeather(false);
             } else{
-                if (this.position != null && this.position[0] != null && this.position[1] != null) {
+                if (position != null && position[0] != null && position[1] != null) {
                     executed.put("GT", true);
                     onLoad(new Response<>(ResponseType.WTODAY, response.getFact()));
                     executed.put("GT", false);
@@ -163,13 +156,11 @@ public class Storage implements Callbacks{
             if (response == null && !executed.get("GT")){
                 updateWeather(false);
             } else{
-                if (position == null || position[0] == null || position[1] == null){
-                    updatePosition();
-                    return;
+                if (position != null && position[0] != null && position[1] != null){
+                    executed.put("GF", true);
+                    onLoad(new Response<>(ResponseType.WFORECASTS, response.getForecasts()));
+                    executed.put("GF", false);
                 }
-                executed.put("GF", true);
-                onLoad(new Response<>(ResponseType.WFORECASTS, response.getForecasts()));
-                executed.put("GF", false);
             }
         }
     }
