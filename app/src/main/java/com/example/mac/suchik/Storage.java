@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import com.example.mac.suchik.WeatherData.WeatherData;
 import com.google.gson.Gson;
-import com.example.mac.suchik.R;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,7 +90,7 @@ public class Storage implements Callbacks{
     }
 
     public void getCurrentCommunity(){
-        if (!executed.get("GGC")) {
+        if (!executed.get("GCC")) {
             if (position != null)
             {
                 executed.put("GCC", true);
