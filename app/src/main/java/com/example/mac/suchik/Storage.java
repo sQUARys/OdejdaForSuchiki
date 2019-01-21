@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import com.example.mac.suchik.WeatherData.WeatherData;
 import com.google.gson.Gson;
-
+import com.example.mac.suchik.R;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,12 +70,13 @@ public class Storage implements Callbacks{
         if (position != null && position[0] != null && position[1] != null) {
             WrapperApi request = new WrapperApi(position[0], position[1], Storage.this, gson);
             request.execute();
-            try {
-                request.get();
-            } catch (ExecutionException | InterruptedException e) {
-                onLoad(new Response<>(ResponseType.ERROR, null));
+            if (is_blocked) {
+                try {
+                    request.get();
+                } catch (ExecutionException | InterruptedException e) {
+                    onLoad(new Response<>(ResponseType.ERROR, null));
+                }
             }
-
             if (executed.get("GT"))
                 executed.put("GF", true);
             else if (executed.get("GF"))
