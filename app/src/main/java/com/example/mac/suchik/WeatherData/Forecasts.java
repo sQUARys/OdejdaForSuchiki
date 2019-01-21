@@ -11,7 +11,7 @@ public class Forecasts {
         private String set_end;
         private float moon_code;
         private String moon_text;
-        Parts PartsObject;
+        Parts parts;
 
 
         // Getter Methods
@@ -53,7 +53,7 @@ public class Forecasts {
         }
 
         public Parts getParts() {
-            return PartsObject;
+            return parts;
         }
 
         // Setter Methods
@@ -95,7 +95,7 @@ public class Forecasts {
         }
 
         public void setParts(Parts partsObject) {
-            this.PartsObject = partsObject;
+            this.parts = partsObject;
         }
     }
 

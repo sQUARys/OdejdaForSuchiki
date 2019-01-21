@@ -1,63 +1,63 @@
 package com.example.mac.suchik.WeatherData;
 
 public class Parts {
-    Night NightObject;
-    Morning MorningObject;
-    Day DayObject;
-    Evening EveningObject;
-    Day_short Day_shortObject;
-    Night_short Night_shortObject;
+    Night night;
+    Morning morning;
+    Day day;
+    Evening evening;
+    Day_short day_short;
+    Night_short night_short;
 
 
     // Getter Methods
 
     public Night getNight() {
-        return NightObject;
+        return night;
     }
 
     public Morning getMorning() {
-        return MorningObject;
+        return morning;
     }
 
     public Day getDay() {
-        return DayObject;
+        return day;
     }
 
     public Evening getEvening() {
-        return EveningObject;
+        return evening;
     }
 
     public Day_short getDay_short() {
-        return Day_shortObject;
+        return day_short;
     }
 
     public Night_short getNight_short() {
-        return Night_shortObject;
+        return night_short;
     }
 
     // Setter Methods
 
     public void setNight(Night nightObject) {
-        this.NightObject = nightObject;
+        this.night = nightObject;
     }
 
     public void setMorning(Morning morningObject) {
-        this.MorningObject = morningObject;
+        this.morning = morningObject;
     }
 
     public void setDay(Day dayObject) {
-        this.DayObject = dayObject;
+        this.day = dayObject;
     }
 
     public void setEvening(Evening eveningObject) {
-        this.EveningObject = eveningObject;
+        this.evening = eveningObject;
     }
 
     public void setDay_short(Day_short day_shortObject) {
-        this.Day_shortObject = day_shortObject;
+        this.day_short = day_shortObject;
     }
 
     public void setNight_short(Night_short night_shortObject) {
-        this.Night_shortObject = night_shortObject;
+        this.night_short = night_shortObject;
     }
 }
