@@ -32,7 +32,7 @@ public class Community extends AsyncTask<Void, Void, Response> {
             if (list != null && list.size() > 0) {
                 Address address = list.get(0);
                 result = address.getLocality();
-                Log.d("Community", result);
+                //Log.d("Community", result);
             }
         } catch (IOException e) {
             Log.e("Community", "Impossible to connect to Geocoder", e);
