@@ -3,6 +3,7 @@ package com.example.mac.suchik;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.WeatherData;
 import com.google.gson.Gson;
 import java.time.format.ResolverStyle;
@@ -99,13 +100,13 @@ public class Storage implements Callbacks{
         }
     }
 
-    public void getClothes() {
+    public void getClothes(Fact weather) {
         if (!executed.get("GC")) {
             if (response == null)
                 updateWeather(false);
             else
                 executed.put("GC", true);
-                new GetClothes(mCtx, Storage.this, response.getFact()).execute();
+                new GetClothes(mCtx, Storage.this, weather).execute();
         }
     }
     public void setPosition(String lat, String lon){
