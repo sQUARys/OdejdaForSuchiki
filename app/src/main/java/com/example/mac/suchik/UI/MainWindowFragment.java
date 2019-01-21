@@ -1,9 +1,13 @@
 package com.example.mac.suchik.UI;
 
+import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.le.AdvertiseSettings;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,7 +49,8 @@ public class MainWindowFragment extends Fragment implements Callbacks {
     private TextView temp_avg;
     private TextView weather_cloud_description;
     private Geoposition geoposition;
-    RecyclerView rv;
+    private RecyclerView rv;
+    private RecyclerView rv_clothes;
     private String city;
     private String mylist;
     RecomendationListAdapter recomendationListAdapter;
@@ -53,6 +58,7 @@ public class MainWindowFragment extends Fragment implements Callbacks {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getPermissions();
         mStorage = Storage.getOrCreate(null); // null потому что я надеюсь, что Storage уже инициализирован
         return inflater.inflate(R.layout.main_window, container, false);
     }
@@ -64,6 +70,7 @@ public class MainWindowFragment extends Fragment implements Callbacks {
         mStorage.subscribe(ResponseType.WTODAY, this);
         mStorage.subscribe(ResponseType.COMMUNITY, this);
         mStorage.subscribe(ResponseType.CLOTHES, this);
+        mStorage.subscribe(ResponseType.WFORECASTS, this);
         Geoposition geoposition = new Geoposition(getContext());
         String[] position = geoposition.start();
         mStorage.setPosition(position[0], position[1]);
@@ -83,11 +90,12 @@ public class MainWindowFragment extends Fragment implements Callbacks {
         weather_cloud = view.findViewById(R.id.weather_cloud);
         temp_avg = view.findViewById(R.id.temp_avg);
         rv = view.findViewById(R.id.recommendation_list);
-        rv.setAdapter(new Weather_Adapter(new ArrayList<Forecasts>()));
+        rv_clothes = view.findViewById(R.id.for_recommendation_list);
         date = view.findViewById(R.id.date);
+        rv_clothes.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        List<Clothe> data = new ArrayList<>();
-        recomendationListAdapter = new ClickRecomendationListAdapter(data, null);
+        List<String> data = new ArrayList<>();
+
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         Date currentDate = new Date();
         String dateText = dateFormat.format(currentDate);
@@ -167,8 +175,8 @@ public class MainWindowFragment extends Fragment implements Callbacks {
             case ResponseType.GGEOPOSITION:
                 String[] position = (String[]) response.response;
                 Log.d("position", position[0] + " " + position[1]);
-                mStorage.getWeatherToday();
-                mStorage.getCurrentCommunity();
+                //mStorage.getWeatherToday();
+                //mStorage.getCurrentCommunity();
                 break;
             case ResponseType.WTODAY:
                 Fact f = (Fact) response.response;
@@ -183,15 +191,30 @@ public class MainWindowFragment extends Fragment implements Callbacks {
                 break;
             case ResponseType.CLOTHES:
                 ArrayList<String> recommendations = (ArrayList<String>) response.response;
-                for (String recommendation : recommendations) {
-                    Log.d("clothes", recommendation);
-                }
+                rv_clothes.setAdapter(new RecomendationListAdapter(recommendations));
                 break;
             case ResponseType.WFORECASTS:
+                List<Forecasts> forecasts = (List<Forecasts>) response.response;
+               if (forecasts.get(0).getParts() == null){
+                   Log.d("forcast", "null!");
+               } else{
+                   for (Forecasts forecast : forecasts) {
+                       Log.d("forcast", String.valueOf(forecast.getParts().getDay().getTemp_avg()));
+                   }
+               }
+                rv.setAdapter(new Weather_Adapter(forecasts));
                 break;
             case ResponseType.GEOERROR:
                 mStorage.setPosition("50", "50");
                 break;
+        }
+    }
+
+    private void getPermissions(){
+        while (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission
+                (getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
     }
 }

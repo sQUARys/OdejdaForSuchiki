@@ -13,7 +13,7 @@ public class ClickRecomendationListAdapter extends RecomendationListAdapter impl
 
     private final OnDocumentClickListener onDocumentClickListener;
 
-    public ClickRecomendationListAdapter(List<Clothe> data,
+    public ClickRecomendationListAdapter(List<String> data,
                                          ClickRecomendationListAdapter.OnDocumentClickListener onDocumentClickListener) {
         super(data);
         this.onDocumentClickListener = onDocumentClickListener;
