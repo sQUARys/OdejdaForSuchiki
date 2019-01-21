@@ -2,7 +2,9 @@ package com.example.mac.suchik;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.WeatherData;
 import com.google.gson.Gson;
 import java.time.format.ResolverStyle;
@@ -95,17 +97,14 @@ public class Storage implements Callbacks{
             {
                 executed.put("GCC", true);
                 new Community(mCtx, position, Storage.this).execute();
-            }
-        }
     }
 
-    public void getClothes() {
+    public void getClothes(Fact weather) {
         if (!executed.get("GC")) {
-            if (response == null)
-                updateWeather(false);
-            else
                 executed.put("GC", true);
-                new GetClothes(mCtx, Storage.this, response.getFact()).execute();
+                new GetClothes(mCtx, Storage.this, weather).execute();
+            executed.put("GC", false);
+
         }
     }
     public void setPosition(String lat, String lon){
@@ -220,7 +219,8 @@ public class Storage implements Callbacks{
             case ResponseType.GGEOPOSITION:
                 this.position = (String[]) response.response;
                 updateWeather(false);
-                getCurrentCommunity();
+                Log.d("position", position[0] + " " + position[1]);
+                //getCurrentCommunity();
                 if (type_callback_rels.get(ResponseType.GGEOPOSITION) == null)
                     type_callback_rels.put(ResponseType.GGEOPOSITION, new ArrayList<Callbacks>());
                 list = type_callback_rels.get(ResponseType.GGEOPOSITION);
