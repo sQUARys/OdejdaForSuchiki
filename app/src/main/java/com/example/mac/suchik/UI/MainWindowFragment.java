@@ -1,5 +1,6 @@
 package com.example.mac.suchik.UI;
 
+import android.bluetooth.le.AdvertiseSettings;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,10 +42,12 @@ public class MainWindowFragment extends Fragment implements Callbacks {
     private TextView date;
     private ImageView weather_cloud;
     private TextView temperature;
+    private TextView temp_avg;
     private TextView weather_cloud_description;
     private Geoposition geoposition;
     RecyclerView rv;
     private String city;
+    private String mylist;
     RecomendationListAdapter recomendationListAdapter;
 
     @Nullable
@@ -80,6 +83,7 @@ public class MainWindowFragment extends Fragment implements Callbacks {
         city_name = view.findViewById(R.id.city_name);
         temperature = view.findViewById(R.id.temperature);
         weather_cloud = view.findViewById(R.id.weather_cloud);
+        temp_avg = view.findViewById(R.id.temp_avg);
         rv = view.findViewById(R.id.recommendation_list);
         rv.setAdapter(new Weather_Adapter(new ArrayList<Forecasts>()));
         date = view.findViewById(R.id.date);
@@ -176,12 +180,10 @@ public class MainWindowFragment extends Fragment implements Callbacks {
                 city_name.setText(city);
                 break;
             case ResponseType.WFORECASTS:
-                rv.setList()
                 break;
             case ResponseType.GEOERROR:
                 mStorage.setPosition("50", "50");
                 break;
         }
     }
-
 }
