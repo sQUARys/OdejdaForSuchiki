@@ -9,12 +9,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
-
-import com.example.mac.suchik.Callbacks;
-import com.example.mac.suchik.MainActivity;
-import com.example.mac.suchik.Response;
-import com.example.mac.suchik.ResponseType;
-import com.example.mac.suchik.Storage;
 import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.WeatherData;
 
@@ -42,9 +36,11 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
 
     final String LOG_TAG = "myLog";
     public GetClothes(Context mContext, Callbacks callbacks, Fact weather) {
+        //Storage.getOrCreate(null).updateWeather(true);
         this.mContext = mContext;
         this.callbacks = callbacks;
         this.weather = weather;
+        //this.weather = Storage.getOrCreate(null).getResponse().getFact();
     }
 
 
@@ -52,8 +48,8 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
     protected Response doInBackground(Void... voids) {
 
 
-        Log.d(LOG_TAG, "temp = " + weather.getTemp() + " rain = " + weather.getPrec_type() + " wind = " +
-                weather.getWind_speed() + " cloud = " + weather.getCloudness());
+        //Log.d(LOG_TAG, "temp = " + weather.getTemp() + " rain = " + weather.getPrec_type() + " wind = " +
+        //        weather.getWind_speed() + " cloud = " + weather.getCloudness());
 
         ArrayList<String> recommendations = new ArrayList<>();
 
@@ -121,9 +117,9 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
             //Теплая шапка, варежки, теплый шарф, шуба/пуховик/теплая куртка, футболка, валенки/теплые ботинки, кофта, терфомбелье, теплые брюки
         }
 
-        Cursor c = db.getData(columns, selection, null, null, null, null);
+        Cursor c = db.getData("clothes", columns, selection, null, null, null, null);
 
-        Log.d(LOG_TAG, "selection = " + selection);
+        //Log.d(LOG_TAG, "selection = " + selection);
 
         //ArrayList<String> clothes = new ArrayList<>();
 
@@ -158,7 +154,7 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
         db.close();
 
         for (Map.Entry<String, ArrayList<String>> stringArrayListEntry : clothes.entrySet()) {
-            Log.d(LOG_TAG, stringArrayListEntry.getKey() + stringArrayListEntry.getValue());
+            //Log.d(LOG_TAG, stringArrayListEntry.getKey() + stringArrayListEntry.getValue());
         }
 
 
@@ -167,9 +163,9 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
             int rnd = new Random().nextInt(list.size());
             recommendations.add(list.get(rnd));
         }
-        Log.d(LOG_TAG, "RESULT:");
+        //Log.d(LOG_TAG, "RESULT:");
         for (String recommendation : recommendations) {
-            Log.d(LOG_TAG, recommendation);
+            //Log.d(LOG_TAG, recommendation);
         }
         return new Response<>(ResponseType.CLOTHES, recommendations);
     }

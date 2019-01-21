@@ -1,11 +1,12 @@
 package com.example.mac.suchik;
 
-class ResponseType {
-    static final int GETW = 1;
-    static final int WTODAY = 2;
-    static final int WFORECASTS = 3;
-    static final int GGEOPOSITION = 4;
-    static final int ERROR = 5;
-    static final int GEOERROR = 6;
-    static final int CLOTHES = 7;
+public class ResponseType {
+    public static final int GETW = 1;
+    public static final int WTODAY = 2;
+    public static final int WFORECASTS = 3;
+    public static final int GGEOPOSITION = 4;
+    public static final int ERROR = 5;
+    public static final int GEOERROR = 6;
+    public static final int CLOTHES = 7;
+    public static final int COMMUNITY = 8;
 }

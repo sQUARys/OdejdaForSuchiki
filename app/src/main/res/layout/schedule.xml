@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.MainActivityUI">
+
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:id="@+id/timePicker"
+        android:layout_height="wrap_content"
+        android:background="@color/white"/>
+
+    <Button
+        android:id="@+id/alarm_on"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timePicker"
+        android:text="Запустить" />
+
+    <Button
+        android:id="@+id/alarm_off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timePicker"
+        android:layout_alignRight="@+id/timePicker"
+        android:text="Остановить" />
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/listOfAlarms"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/updateTimeText">
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/updateTimeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/alarm_on"
+        android:layout_toLeftOf="@+id/alarm_off"
+        android:layout_toRightOf="@+id/alarm_on"
+        android:text="Large Text"
+        android:gravity="center"/>
+
+</RelativeLayout>
