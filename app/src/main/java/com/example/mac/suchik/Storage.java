@@ -7,7 +7,6 @@ import android.util.Log;
 import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.WeatherData;
 import com.google.gson.Gson;
-
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import java.util.concurrent.ExecutionException;
 
 public class Storage implements Callbacks{
     private WeatherData response;
-    private Geoposition geoposition;
     private String[] position;
     private HashMap<Integer, List<Callbacks>> type_callback_rels = new LinkedHashMap<>();
     private Gson gson;
@@ -42,7 +40,7 @@ public class Storage implements Callbacks{
     Storage(Context context){
         this.mCtx = context;
         this.gson = new Gson();
-        geoposition = new Geoposition(context);
+
         sp = context.getSharedPreferences(context.getString(R.string.weather_preferences), Context.MODE_PRIVATE);
         executed = new HashMap<String, Boolean> (){{
             put("GG", false);
@@ -51,17 +49,17 @@ public class Storage implements Callbacks{
             put("GC", false);
             put("GCC", false);
         }};
-        if (response == null && !Objects.equals(sp.getString("weather", null), "null")){
+        if (!Objects.equals(sp.getString("weather", null), null)){
             onLoad(new Response<>(ResponseType.GETW,
                     gson.fromJson(sp.getString("weather", null),
                             WeatherData.class)));
         }
-        if (response == null && !Objects.equals(sp.getString("pos_lat",
-                null), "null") &&
-                response == null && !Objects.equals(sp.getString("pos_lon",
-                null), "null")){
-            setPosition(sp.getString("pos_lat", null),
-                    sp.getString("pos_lon", null));
+        if (!Objects.equals(sp.getString("pos_lat",
+                null), null) && !Objects.equals(sp.getString("pos_lon",
+                null), null)){
+            position = new String[]{sp.getString("pos_lat",
+                    null), sp.getString("pos_lon",
+                    null)};
         }
     }
 
@@ -73,16 +71,13 @@ public class Storage implements Callbacks{
         if (position != null && position[0] != null && position[1] != null) {
             WrapperApi request = new WrapperApi(position[0], position[1], Storage.this, gson);
             request.execute();
-            if (is_blocked == true){
+            if (is_blocked) {
                 try {
                     request.get();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (ExecutionException | InterruptedException e) {
+                    onLoad(new Response<>(ResponseType.ERROR, null));
                 }
             }
-
             if (executed.get("GT"))
                 executed.put("GF", true);
             else if (executed.get("GF"))
@@ -97,7 +92,10 @@ public class Storage implements Callbacks{
     }
 
     public void getCurrentCommunity(){
-        if (position != null)
+        if (!executed.get("GCC")) {
+            if (position != null)
+            {
+                executed.put("GCC", true);
                 new Community(mCtx, position, Storage.this).execute();
     }
 
@@ -252,7 +250,7 @@ public class Storage implements Callbacks{
             case ResponseType.COMMUNITY:
                 if (type_callback_rels.get(ResponseType.COMMUNITY) == null)
                     type_callback_rels.put(ResponseType.COMMUNITY, new ArrayList<Callbacks>());
-                list = type_callback_rels.get(ResponseType.CLOTHES);
+                list = type_callback_rels.get(ResponseType.COMMUNITY);
                 for (Callbacks callbacks: list) {
                     callbacks.onLoad(response);
                 }

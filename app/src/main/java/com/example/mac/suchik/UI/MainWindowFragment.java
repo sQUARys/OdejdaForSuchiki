@@ -1,5 +1,6 @@
 package com.example.mac.suchik.UI;
 
+import android.bluetooth.le.AdvertiseSettings;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,7 +23,9 @@ import com.example.mac.suchik.ResponseType;
 import com.example.mac.suchik.Storage;
 import com.example.mac.suchik.UI.main_window.ClickRecomendationListAdapter;
 import com.example.mac.suchik.UI.main_window.RecomendationListAdapter;
+import com.example.mac.suchik.UI.settings_page.TimesListAdapter;
 import com.example.mac.suchik.WeatherData.Fact;
+import com.example.mac.suchik.WeatherData.Forecasts;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -39,7 +42,12 @@ public class MainWindowFragment extends Fragment implements Callbacks {
     private TextView date;
     private ImageView weather_cloud;
     private TextView temperature;
+    private TextView temp_avg;
     private TextView weather_cloud_description;
+    private Geoposition geoposition;
+    RecyclerView rv;
+    private String city;
+    private String mylist;
     RecomendationListAdapter recomendationListAdapter;
 
     @Nullable
@@ -47,13 +55,11 @@ public class MainWindowFragment extends Fragment implements Callbacks {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mStorage = Storage.getOrCreate(null); // null потому что я надеюсь, что Storage уже инициализирован
         return inflater.inflate(R.layout.main_window, container, false);
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
         mStorage.subscribe(ResponseType.GGEOPOSITION, this);
         mStorage.subscribe(ResponseType.WTODAY, this);
         mStorage.subscribe(ResponseType.COMMUNITY, this);
@@ -75,12 +81,13 @@ public class MainWindowFragment extends Fragment implements Callbacks {
         city_name = view.findViewById(R.id.city_name);
         temperature = view.findViewById(R.id.temperature);
         weather_cloud = view.findViewById(R.id.weather_cloud);
+        temp_avg = view.findViewById(R.id.temp_avg);
+        rv = view.findViewById(R.id.recommendation_list);
+        rv.setAdapter(new Weather_Adapter(new ArrayList<Forecasts>()));
         date = view.findViewById(R.id.date);
-        RecyclerView rv = view.findViewById(R.id.recommendation_list);
         rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         List<Clothe> data = new ArrayList<>();
         recomendationListAdapter = new ClickRecomendationListAdapter(data, null);
-        rv.setAdapter(recomendationListAdapter);
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         Date currentDate = new Date();
         String dateText = dateFormat.format(currentDate);
@@ -178,6 +185,15 @@ public class MainWindowFragment extends Fragment implements Callbacks {
                 for (String recommendation : recommendations) {
                     Log.d("clothes", recommendation);
                 }
+                break;
+            case ResponseType.COMMUNITY:
+                city = (String) response.response;
+                city_name.setText(city);
+                break;
+            case ResponseType.WFORECASTS:
+                break;
+            case ResponseType.GEOERROR:
+                mStorage.setPosition("50", "50");
                 break;
         }
     }

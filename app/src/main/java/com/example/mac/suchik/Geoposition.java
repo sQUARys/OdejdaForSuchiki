@@ -144,6 +144,7 @@ public class Geoposition implements LocationListener {
             }
 
         } catch (Exception e) {
+            throw e;
         }
         return position;
     }

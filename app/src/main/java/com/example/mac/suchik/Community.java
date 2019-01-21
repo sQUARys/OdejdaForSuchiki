@@ -17,8 +17,8 @@ public class Community extends AsyncTask<Void, Void, Response> {
 
     public Community(Context context, String[] location, Callbacks callbacks) {
         this.mCtx = context;
-        this.lat = Double.valueOf(location[0]);
-        this.lng = Double.valueOf(location[1]);
+        this.lat = 43;
+        this.lng = 49;
         this.callbacks = callbacks;
     }
 

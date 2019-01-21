@@ -8,7 +8,7 @@ import com.example.mac.suchik.R;
 
 public class VH extends RecyclerView.ViewHolder {
 
-    TextView tv;
+    public TextView tv;
     public VH(View itemView) {
         super(itemView);
         tv = itemView.findViewById(R.id.tie);
