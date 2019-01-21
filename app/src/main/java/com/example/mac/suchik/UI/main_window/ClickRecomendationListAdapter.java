@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mac.suchik.Clothe;
+import com.example.mac.suchik.UI.settings_page.VH_weather_adapter;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class ClickRecomendationListAdapter extends RecomendationListAdapter impl
 
     private final OnDocumentClickListener onDocumentClickListener;
 
-    public ClickRecomendationListAdapter(List<Clothe> data,
+    public ClickRecomendationListAdapter(List<String> data,
                                          ClickRecomendationListAdapter.OnDocumentClickListener onDocumentClickListener) {
         super(data);
         this.onDocumentClickListener = onDocumentClickListener;
@@ -30,8 +31,8 @@ public class ClickRecomendationListAdapter extends RecomendationListAdapter impl
     }
 
     @Override
-    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        VH holder = super.onCreateViewHolder(parent, viewType);
+    public VH_weather_adapter onCreateViewHolder(ViewGroup parent, int viewType) {
+        VH_weather_adapter holder = super.onCreateViewHolder(parent, viewType);
         holder.itemView.setOnClickListener(this);
 
         return holder;
@@ -39,7 +40,7 @@ public class ClickRecomendationListAdapter extends RecomendationListAdapter impl
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    public void onBindViewHolder(VH holder, int position) {
+    public void onBindViewHolder(VH_weather_adapter holder, int position) {
         super.onBindViewHolder(holder, position);
         holder.itemView.setTag(position);
     }

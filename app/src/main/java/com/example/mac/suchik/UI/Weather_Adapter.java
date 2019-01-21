@@ -28,7 +28,7 @@ public class Weather_Adapter extends RecyclerView.Adapter<VH> {
     }
 
     public void onBindViewHolder(VH holder, int position) {
-        holder.tv.setText(String.valueOf(mData.get(position).getParts().getDay().getTemp_avg()));
+        //holder.tv.setText(String.valueOf(mData.get(position).getParts().getDay().getTemp_avg()));
     }
 
     @Override

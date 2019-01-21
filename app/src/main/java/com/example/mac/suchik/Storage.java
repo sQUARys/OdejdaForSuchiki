@@ -218,7 +218,8 @@ public class Storage implements Callbacks{
                 break;
             case ResponseType.GGEOPOSITION:
                 this.position = (String[]) response.response;
-                updateWeather(false);
+                getWeatherToday();
+                getWeatherForecasts();
                 getCurrentCommunity();
                 if (type_callback_rels.get(ResponseType.GGEOPOSITION) == null)
                     type_callback_rels.put(ResponseType.GGEOPOSITION, new ArrayList<Callbacks>());
