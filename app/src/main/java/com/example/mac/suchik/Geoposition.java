@@ -48,11 +48,11 @@ public class Geoposition implements LocationListener {
     private static final long MIN_TIME_BW_UPDATES = 0; // 1 minute
 
 
-    Geoposition(Context mContext) {
+    public Geoposition(Context mContext) {
         this.mContext = mContext;
     }
 
-    public Response start(){
+    public String[] start(){
         locationManager = (LocationManager)mContext.getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -64,21 +64,21 @@ public class Geoposition implements LocationListener {
                     (mContext, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                 return start();
             else
-                return new Response<Object>(ResponseType.GEOERROR, null);
+                return new String[]{null, null};
         }
         else if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
                 return start();
-            return new Response<Object>(ResponseType.GEOERROR, null);
+            return new String[]{null, null};
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             return getLocation();
-        } else return new Response<Object>(ResponseType.GEOERROR, null);
+        } else return new String[]{null, null};
 
     }
 
 
-    private Response getLocation() {
+    private String[] getLocation() {
 
         String[] position = new String[2];
         try {
@@ -145,7 +145,7 @@ public class Geoposition implements LocationListener {
 
         } catch (Exception e) {
         }
-        return new Response<>(ResponseType.GGEOPOSITION, position);
+        return position;
     }
 
     protected void buildAlertMessageNoGps() {
@@ -165,34 +165,6 @@ public class Geoposition implements LocationListener {
                 });
         final AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    public void get_community(String[] location){
-        double lat = Double.valueOf(location[0]);
-        double lng = Double.valueOf(location[1]);
-
-        Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
-
-        try {
-            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
-
-            if (addresses != null) {
-                Address returnedAddress = addresses.get(0);
-                StringBuilder strReturnedAddress = new StringBuilder(
-                        "Адрес:\n");
-                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress
-                            .append(returnedAddress.getAddressLine(i)).append(
-                            "\n");
-                }
-                Log.d("Community", strReturnedAddress.toString());
-            } else {
-                Log.d("Community","Нет адресов!");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
@@ -216,20 +188,6 @@ public class Geoposition implements LocationListener {
 
     }
 
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_LOCATION:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission granted
-                    Storage storage = Storage.getOrCreate((Context) new Object());
-                    storage.updatePosition();
-                } else {
-                    // permission denied
-                }
-                return;
-        }
-    }
 
 }
 

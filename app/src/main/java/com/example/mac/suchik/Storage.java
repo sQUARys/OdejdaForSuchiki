@@ -2,7 +2,9 @@ package com.example.mac.suchik;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.WeatherData;
 import com.google.gson.Gson;
 
@@ -71,10 +73,14 @@ public class Storage implements Callbacks{
         if (position != null && position[0] != null && position[1] != null) {
             WrapperApi request = new WrapperApi(position[0], position[1], Storage.this, gson);
             request.execute();
-            try {
-                request.get();
-            } catch (ExecutionException | InterruptedException e) {
-                onLoad(new Response<>(ResponseType.ERROR, null));
+            if (is_blocked == true){
+                try {
+                    request.get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             if (executed.get("GT"))
@@ -91,22 +97,16 @@ public class Storage implements Callbacks{
     }
 
     public void getCurrentCommunity(){
-        if (!executed.get("GGC")) {
-            if (position != null)
-            {
-                executed.put("GCC", true);
+        if (position != null)
                 new Community(mCtx, position, Storage.this).execute();
-            }
-        }
     }
 
-    public void getClothes() {
+    public void getClothes(Fact weather) {
         if (!executed.get("GC")) {
-            if (response == null)
-                updateWeather(false);
-            else
                 executed.put("GC", true);
-                new GetClothes(mCtx, Storage.this, response.getFact()).execute();
+                new GetClothes(mCtx, Storage.this, weather).execute();
+            executed.put("GC", false);
+
         }
     }
     public void setPosition(String lat, String lon){
@@ -221,7 +221,8 @@ public class Storage implements Callbacks{
             case ResponseType.GGEOPOSITION:
                 this.position = (String[]) response.response;
                 updateWeather(false);
-                getCurrentCommunity();
+                Log.d("position", position[0] + " " + position[1]);
+                //getCurrentCommunity();
                 if (type_callback_rels.get(ResponseType.GGEOPOSITION) == null)
                     type_callback_rels.put(ResponseType.GGEOPOSITION, new ArrayList<Callbacks>());
                 list = type_callback_rels.get(ResponseType.GGEOPOSITION);

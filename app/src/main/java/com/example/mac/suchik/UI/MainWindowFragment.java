@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.mac.suchik.Callbacks;
 import com.example.mac.suchik.Clothe;
+import com.example.mac.suchik.Geoposition;
 import com.example.mac.suchik.R;
 import com.example.mac.suchik.Response;
 import com.example.mac.suchik.ResponseType;
@@ -52,9 +53,14 @@ public class MainWindowFragment extends Fragment implements Callbacks {
     @Override
     public void onStart() {
         super.onStart();
+
         mStorage.subscribe(ResponseType.GGEOPOSITION, this);
         mStorage.subscribe(ResponseType.WTODAY, this);
-        mStorage.updatePosition();
+        mStorage.subscribe(ResponseType.COMMUNITY, this);
+        mStorage.subscribe(ResponseType.CLOTHES, this);
+        Geoposition geoposition = new Geoposition(getContext());
+        String[] position = geoposition.start();
+        mStorage.setPosition(position[0], position[1]);
     }
 
     @Override
@@ -153,12 +159,25 @@ public class MainWindowFragment extends Fragment implements Callbacks {
         switch (response.type) {
             case ResponseType.GGEOPOSITION:
                 String[] position = (String[]) response.response;
-                mStorage.getWeatherToday(position);
+                Log.d("position", position[0] + " " + position[1]);
+                mStorage.getWeatherToday();
+                mStorage.getCurrentCommunity();
                 break;
             case ResponseType.WTODAY:
                 Fact f = (Fact) response.response;
                 onWeatherDataUpdated(f);
                 onChangedWeatherDraw(f);
+                mStorage.getClothes(f);
+                break;
+            case ResponseType.COMMUNITY:
+                String community = (String) response.response;
+                Log.d("community", "community = " + community);
+                break;
+            case ResponseType.CLOTHES:
+                ArrayList<String> recommendations = (ArrayList<String>) response.response;
+                for (String recommendation : recommendations) {
+                    Log.d("clothes", recommendation);
+                }
                 break;
         }
     }
