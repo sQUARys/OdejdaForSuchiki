@@ -167,8 +167,8 @@ public class MainWindowFragment extends Fragment implements Callbacks {
             case ResponseType.GGEOPOSITION:
                 String[] position = (String[]) response.response;
                 Log.d("position", position[0] + " " + position[1]);
-                mStorage.getWeatherToday();
-                mStorage.getCurrentCommunity();
+//                mStorage.getWeatherToday();
+//                mStorage.getCurrentCommunity();
                 break;
             case ResponseType.WTODAY:
                 Fact f = (Fact) response.response;
