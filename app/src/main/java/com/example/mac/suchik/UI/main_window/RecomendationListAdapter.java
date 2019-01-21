@@ -18,7 +18,6 @@ public class RecomendationListAdapter extends RecyclerView.Adapter<VH> {
         super();
         mData = data;
     }
-
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.settings_rv, parent, false);

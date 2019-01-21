@@ -64,16 +64,20 @@ public class Geoposition implements LocationListener {
                     (mContext, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                 return start();
             else
-                return new String[]{null, null};
+                return new String[]{null , null};
         }
         else if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
                 return start();
-            return new String[]{null, null};
+            Log.d("geo", "!isProviderEnabled");
+            return new String[]{null , null};
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             return getLocation();
-        } else return new String[]{null, null};
+        } else {
+            Log.d("geo", "err");
+            return new String[]{null, null};
+        }
 
     }
 
@@ -144,6 +148,7 @@ public class Geoposition implements LocationListener {
             }
 
         } catch (Exception e) {
+            throw e;
         }
         return position;
     }
