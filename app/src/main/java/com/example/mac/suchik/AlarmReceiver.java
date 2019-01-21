@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
+import com.example.mac.suchik.UI.MainActivityUI;
+
 public class AlarmReceiver extends BroadcastReceiver{
 
     private static final int NOTIFICATION_ID = 0;
