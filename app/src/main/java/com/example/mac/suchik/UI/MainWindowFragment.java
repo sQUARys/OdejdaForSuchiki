@@ -58,17 +58,20 @@ public class MainWindowFragment extends Fragment implements Callbacks {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getPermissions();
         mStorage = Storage.getOrCreate(null); // null потому что я надеюсь, что Storage уже инициализирован
-        return inflater.inflate(R.layout.main_window, container, false);
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
         mStorage.subscribe(ResponseType.GGEOPOSITION, this);
         mStorage.subscribe(ResponseType.WTODAY, this);
         mStorage.subscribe(ResponseType.COMMUNITY, this);
         mStorage.subscribe(ResponseType.CLOTHES, this);
         mStorage.subscribe(ResponseType.WFORECASTS, this);
+        return inflater.inflate(R.layout.main_window, container, false);
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
         Geoposition geoposition = new Geoposition(getContext());
         String[] position = geoposition.start();
         mStorage.setPosition(position[0], position[1]);
@@ -194,13 +197,13 @@ public class MainWindowFragment extends Fragment implements Callbacks {
                 break;
             case ResponseType.WFORECASTS:
                 List<Forecasts> forecasts = (List<Forecasts>) response.response;
-               if (forecasts.get(0).getParts() == null){
-                   Log.d("forcast", "null!");
-               } else{
-                   for (Forecasts forecast : forecasts) {
-                       Log.d("forcast", String.valueOf(forecast.getParts().getDay().getTemp_avg()));
-                   }
-               }
+//               if (forecasts.get(0).getParts() == null){
+//                   Log.d("forcast", "null!");
+//               } else{
+//                   for (Forecasts forecast : forecasts) {
+//                       Log.d("forcast", String.valueOf(forecast.getParts().getDay().getTemp_avg()));
+//                   }
+//               }
                 rv.setAdapter(new Weather_Adapter(forecasts));
                 break;
             case ResponseType.GEOERROR:

@@ -11,6 +11,6 @@ public class VH_weather_adapter extends RecyclerView.ViewHolder {
 
     public VH_weather_adapter(View itemView) {
         super(itemView);
-        tv = itemView.findViewById(R.id.second);
+        tv = itemView.findViewById(R.id.for_main);
     }
 }

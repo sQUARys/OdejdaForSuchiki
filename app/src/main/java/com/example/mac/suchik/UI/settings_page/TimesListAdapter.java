@@ -25,7 +25,7 @@ public class TimesListAdapter extends RecyclerView.Adapter<VH> {
     }
 
     public void onBindViewHolder(VH holder, int position) {
-        holder.tv.setText(mData.get(position));
+        holder.tv1.setText(mData.get(position));
     }
 
     @Override
