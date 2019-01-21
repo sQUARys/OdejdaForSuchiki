@@ -176,15 +176,16 @@ public class MainWindowFragment extends Fragment implements Callbacks {
                 onChangedWeatherDraw(f);
                 mStorage.getClothes(f);
                 break;
+            case ResponseType.COMMUNITY:
+                String community = (String) response.response;
+                city_name.setText(community);
+                Log.d("community", "community = " + community);
+                break;
             case ResponseType.CLOTHES:
                 ArrayList<String> recommendations = (ArrayList<String>) response.response;
                 for (String recommendation : recommendations) {
                     Log.d("clothes", recommendation);
                 }
-                break;
-            case ResponseType.COMMUNITY:
-                city = (String) response.response;
-                city_name.setText(city);
                 break;
             case ResponseType.WFORECASTS:
                 break;

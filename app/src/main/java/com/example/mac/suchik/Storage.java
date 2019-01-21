@@ -2,7 +2,6 @@ package com.example.mac.suchik;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.WeatherData;
@@ -101,10 +100,11 @@ public class Storage implements Callbacks{
 
     public void getClothes(Fact weather) {
         if (!executed.get("GC")) {
+            if (response == null)
+                updateWeather(false);
+            else
                 executed.put("GC", true);
                 new GetClothes(mCtx, Storage.this, weather).execute();
-            executed.put("GC", false);
-
         }
     }
     public void setPosition(String lat, String lon){
@@ -219,8 +219,7 @@ public class Storage implements Callbacks{
             case ResponseType.GGEOPOSITION:
                 this.position = (String[]) response.response;
                 updateWeather(false);
-                Log.d("position", position[0] + " " + position[1]);
-                //getCurrentCommunity();
+                getCurrentCommunity();
                 if (type_callback_rels.get(ResponseType.GGEOPOSITION) == null)
                     type_callback_rels.put(ResponseType.GGEOPOSITION, new ArrayList<Callbacks>());
                 list = type_callback_rels.get(ResponseType.GGEOPOSITION);
