@@ -19,13 +19,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mac.suchik.Callbacks;
-import com.example.mac.suchik.Clothe;
 import com.example.mac.suchik.Geoposition;
 import com.example.mac.suchik.R;
 import com.example.mac.suchik.Response;
 import com.example.mac.suchik.ResponseType;
 import com.example.mac.suchik.Storage;
-import com.example.mac.suchik.UI.main_window.ClickRecomendationListAdapter;
 import com.example.mac.suchik.UI.main_window.RecomendationListAdapter;
 import com.example.mac.suchik.UI.settings_page.TimesListAdapter;
 import com.example.mac.suchik.WeatherData.Fact;
@@ -74,6 +72,7 @@ public class MainWindowFragment extends Fragment implements Callbacks {
         Geoposition geoposition = new Geoposition(getContext());
         String[] position = geoposition.start();
         mStorage.setPosition(position[0], position[1]);
+        mStorage.updateWeather(false);
     }
 
     @Override

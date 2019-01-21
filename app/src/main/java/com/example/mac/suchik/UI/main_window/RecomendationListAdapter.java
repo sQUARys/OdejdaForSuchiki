@@ -7,11 +7,12 @@ import android.view.ViewGroup;
 
 import com.example.mac.suchik.Clothe;
 import com.example.mac.suchik.R;
+import com.example.mac.suchik.UI.settings_page.VH_weather_adapter;
 import com.example.mac.suchik.WeatherData.Forecasts;
 
 import java.util.List;
 
-public class RecomendationListAdapter extends RecyclerView.Adapter<VH> {
+public class RecomendationListAdapter extends RecyclerView.Adapter<VH_weather_adapter> {
 
     private List<String> mData;
 
@@ -20,12 +21,12 @@ public class RecomendationListAdapter extends RecyclerView.Adapter<VH> {
         mData = data;
     }
     @Override
-    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+    public VH_weather_adapter onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recomendation_list_element, parent, false);
-        return new VH(view);
+        return new VH_weather_adapter(view);
     }
 
-    public void onBindViewHolder(VH holder, int position) {
+    public void onBindViewHolder(VH_weather_adapter holder, int position) {
         holder.tv.setText(mData.get(position));
     }
 
