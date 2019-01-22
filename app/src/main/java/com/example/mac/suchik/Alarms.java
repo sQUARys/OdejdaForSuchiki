@@ -9,9 +9,16 @@ import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Set;
 
 public class Alarms {
@@ -22,7 +29,8 @@ public class Alarms {
     private Intent notifyIntent;
     private Context context;
     private SharedPreferences sp;
-    private Set<String> str;
+    private AlarmsClock alarmsClock;
+    private Gson gson = new Gson();
 
     public Alarms(Context context) {
         this.context = context;
@@ -30,7 +38,13 @@ public class Alarms {
         mNotificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
         alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
         sp = context.getSharedPreferences("alarms", Context.MODE_PRIVATE);
-        str = sp.getStringSet("alarms", new HashSet<String>());
+        if (sp.getString("alarms", "").equals("")) {alarmsClock = new AlarmsClock();
+        alarmsClock.setAlarmClock(new ArrayList<AlarmClock>());}
+        else alarmsClock = gson.fromJson(sp.getString("alarms", ""), AlarmsClock.class);
+    }
+
+    public AlarmsClock getAlarmsClock() {
+        return alarmsClock;
     }
 
     public void createNotification(int hours, int mins) {
@@ -43,23 +57,24 @@ public class Alarms {
         calendar.set(Calendar.SECOND, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent);
-        str.add(nowID + "");
+        ArrayList<AlarmClock> arcl = alarmsClock.getAlarmClock();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        arcl.add(new AlarmClock(dateFormat.format(calendar.getTime()), nowID + ""));
         SharedPreferences.Editor edit = sp.edit();
-        edit.putStringSet("alarms", str);
+        edit.putString("alarms", gson.toJson(arcl));
         edit.commit();
 
     }
 
     public void removeAllNotification() {
-        for (String s: str) {
+        for (AlarmClock s: alarmsClock.getAlarmClock()) {
             PendingIntent notS = PendingIntent.getBroadcast
-                    (context, Integer.parseInt(s), notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    (context, Integer.parseInt(s.getId()), notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager.cancel(notS);
         }
         mNotificationManager.cancelAll();
-        str = new HashSet<>();
         SharedPreferences.Editor edit = sp.edit();
-        edit.putStringSet("alarms", str);
+        edit.putString("alarms", "");
         edit.commit();
     }
 
@@ -70,6 +85,6 @@ public class Alarms {
     }
 
     public String getInfo(){
-        return str.toString();
+        return alarmsClock.getAlarmClock().toString();
     }
 }

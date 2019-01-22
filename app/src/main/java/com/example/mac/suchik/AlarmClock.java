@@ -4,7 +4,16 @@ public class AlarmClock {
     private String time;
     private String id;
 
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getTime() {
+
         return time;
     }
 

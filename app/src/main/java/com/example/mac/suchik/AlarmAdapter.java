@@ -11,20 +11,21 @@ import com.example.mac.suchik.AlarmHolder;
 import com.example.mac.suchik.R;
 import com.example.mac.suchik.UI.settings_page.VH;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmHolder> {
     TextView second;
-    private List<AlarmClock> mData;
+    private ArrayList<AlarmClock> mData;
     private View view;
 
-    public AlarmAdapter(List<AlarmClock> data) {
+    public AlarmAdapter(ArrayList<AlarmClock> data) {
         mData = data;
     }
 
     @Override
     public AlarmHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recomendation_list_element, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.alarm_layout, parent, false);
         this.view = view;
         return new AlarmHolder(view);
     }

@@ -22,13 +22,18 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.mac.suchik.AlarmAdapter;
+import com.example.mac.suchik.AlarmClock;
 import com.example.mac.suchik.Alarms;
 import com.example.mac.suchik.R;
 import com.example.mac.suchik.UI.main_window.RecomendationListAdapter;
 import com.example.mac.suchik.UI.settings_page.TimesListAdapter;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class Schedule extends Fragment {
   TextView tv;
@@ -83,6 +88,8 @@ public class Schedule extends Fragment {
       }
     });
     rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-    rv.setAdapter(new RecomendationListAdapter(Arrays.asList(aStrings)));
+    if (alarms.getAlarmsClock().getAlarmClock() == null)
+      rv.setAdapter(new AlarmAdapter(new ArrayList<AlarmClock>()));
+    else rv.setAdapter(new AlarmAdapter(alarms.getAlarmsClock().getAlarmClock()));
   }
 }
