@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.mac.suchik.R;
+import com.example.mac.suchik.UI.main_window.RecomendationListAdapter;
 import com.example.mac.suchik.UI.settings_page.TimesListAdapter;
 import java.util.Arrays;
 
@@ -50,7 +51,6 @@ public class Schedule extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.schedule, container, false);
-
     }
 
     @Override
@@ -92,6 +92,6 @@ public class Schedule extends Fragment {
         rv = view.findViewById(R.id.listOfAlarms);
         tv = view.findViewById(R.id.updateTimeText);
         rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        rv.setAdapter(new TimesListAdapter(Arrays.asList(aStrings)));
+        rv.setAdapter(new RecomendationListAdapter(Arrays.asList(aStrings)));
     }
 }

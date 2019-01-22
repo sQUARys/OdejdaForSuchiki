@@ -32,8 +32,6 @@ public class TimesListAdapter extends RecyclerView.Adapter<VH> {
     public int getItemCount() {
         return mData.size();
     }
-
-
 }
 
 
