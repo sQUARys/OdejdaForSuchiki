@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.mac.suchik.R;
+import com.example.mac.suchik.UI.main_window.RecomendationListAdapter;
 import com.example.mac.suchik.UI.settings_page.TimesListAdapter;
 import java.util.Arrays;
 
@@ -42,6 +43,6 @@ public class Settings extends Fragment {
         rv = view.findViewById(R.id.settings_rv);
         tv = view.findViewById(R.id.settings);
         rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        rv.setAdapter(new TimesListAdapter(Arrays.asList(sString)));
+        rv.setAdapter(new RecomendationListAdapter(Arrays.asList(sString)));
     }
 }

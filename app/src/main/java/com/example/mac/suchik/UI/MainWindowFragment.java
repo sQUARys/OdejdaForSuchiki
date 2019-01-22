@@ -25,7 +25,7 @@ import com.example.mac.suchik.Response;
 import com.example.mac.suchik.ResponseType;
 import com.example.mac.suchik.Storage;
 import com.example.mac.suchik.UI.main_window.RecomendationListAdapter;
-import com.example.mac.suchik.UI.settings_page.TimesListAdapter;
+import com.example.mac.suchik.UI.settings_page.VH;
 import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.Forecasts;
 
@@ -67,7 +67,6 @@ public class MainWindowFragment extends Fragment implements Callbacks {
         return inflater.inflate(R.layout.main_window, container, false);
 
     }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -83,7 +82,6 @@ public class MainWindowFragment extends Fragment implements Callbacks {
         mStorage.unsubscribe(this);
         super.onStop();
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

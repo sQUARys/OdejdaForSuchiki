@@ -48,9 +48,8 @@ public class Storage implements Callbacks{
             put("GCC", false);
         }};
         if (!Objects.equals(sp.getString("weather", null), null)){
-            onLoad(new Response<>(ResponseType.GETW,
-                    gson.fromJson(sp.getString("weather", null),
-                            WeatherData.class)));
+            response =  gson.fromJson(sp.getString("weather", null),
+                            WeatherData.class);
         }
         if (!Objects.equals(sp.getString("pos_lat",
                 null), null) && !Objects.equals(sp.getString("pos_lon",
@@ -218,8 +217,7 @@ public class Storage implements Callbacks{
                 break;
             case ResponseType.GGEOPOSITION:
                 this.position = (String[]) response.response;
-                getWeatherToday();
-                getWeatherForecasts();
+                updateWeather(false);
                 getCurrentCommunity();
                 if (type_callback_rels.get(ResponseType.GGEOPOSITION) == null)
                     type_callback_rels.put(ResponseType.GGEOPOSITION, new ArrayList<Callbacks>());

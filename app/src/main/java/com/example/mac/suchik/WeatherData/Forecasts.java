@@ -94,8 +94,8 @@ public class Forecasts {
             this.moon_text = moon_text;
         }
 
-        public void setParts(Parts partsObject) {
-            this.parts = partsObject;
+        public void setParts(Parts parts) {
+            this.parts = parts;
         }
     }
 

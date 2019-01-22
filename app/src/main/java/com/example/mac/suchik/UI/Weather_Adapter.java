@@ -9,6 +9,7 @@ import android.widget.Adapter;
 
 import com.example.mac.suchik.Clothe;
 import com.example.mac.suchik.R;
+import com.example.mac.suchik.UI.settings_page.VH;
 import com.example.mac.suchik.UI.settings_page.VH_weather_adapter;
 import com.example.mac.suchik.WeatherData.Forecasts;
 
@@ -28,7 +29,8 @@ public class Weather_Adapter extends RecyclerView.Adapter<VH_weather_adapter> {
     @Override
     public VH_weather_adapter onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.for_list_weather, parent, false);
-        return new VH_weather_adapter(view);
+        VH_weather_adapter weather_adapter = new VH_weather_adapter(view);
+        return weather_adapter;
     }
 
     public void onBindViewHolder(VH_weather_adapter holder, int position) {
@@ -47,7 +49,8 @@ public class Weather_Adapter extends RecyclerView.Adapter<VH_weather_adapter> {
         format = new SimpleDateFormat("dd-MM");
         String date = format.format(newDate);
         holder.date.setText(date);
-        holder.temp_avg.setText(String.valueOf(mData.get(position).getParts().getDay().getTemp_avg()));
+        Float s = mData.get(position).getParts().getDay().getTemp_avg();
+        holder.temp_avg.setText("ASD");
     }
 
     @Override
