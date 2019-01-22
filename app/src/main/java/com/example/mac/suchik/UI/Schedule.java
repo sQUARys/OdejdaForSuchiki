@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.mac.suchik.Alarms;
 import com.example.mac.suchik.R;
+import com.example.mac.suchik.UI.main_window.RecomendationListAdapter;
 import com.example.mac.suchik.UI.settings_page.TimesListAdapter;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -54,25 +55,6 @@ public class Schedule extends Fragment {
     inflater.inflate(R.menu.main_menu, menu);
   }
 
-  private Integer[] calculateData(int hours, int mins){
-    if (timePicker.getCurrentHour() <= hours){
-      if (timePicker.getCurrentMinute() < mins){
-        return new Integer[]{23, 60 - timePicker.getCurrentMinute()};
-      }
-      else {
-        return new Integer[]{0, timePicker.getCurrentMinute() - mins};
-      }
-    }
-    else{
-      if (timePicker.getCurrentMinute() < mins){
-        return new Integer[]{timePicker.getCurrentHour() - hours - 1, 60 + timePicker.getCurrentMinute() - mins};
-      }
-      else {
-        return new Integer[]{timePicker.getCurrentHour() - hours, timePicker.getCurrentMinute() - mins};
-      }
-    }
-  }
-
   @Override
   public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
@@ -85,18 +67,22 @@ public class Schedule extends Fragment {
     alarm_on.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Date date = Calendar.getInstance().getTime();
-        final Integer[] fAlarm = calculateData(date.getHours(), date.getMinutes());
-        alarms.createNotification(fAlarm[0], fAlarm[1]);
+        alarms.createNotification(timePicker.getCurrentHour(), timePicker.getCurrentMinute());
       }
     });
     alarm_off.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        alarms.removeNotification();
+        alarms.removeAllNotification();
+      }
+    });
+    view.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Toast.makeText(view.getContext(), alarms.getInfo(), Toast.LENGTH_SHORT).show();
       }
     });
     rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-    rv.setAdapter(new TimesListAdapter(Arrays.asList(aStrings)));
+    rv.setAdapter(new RecomendationListAdapter(Arrays.asList(aStrings)));
   }
 }
