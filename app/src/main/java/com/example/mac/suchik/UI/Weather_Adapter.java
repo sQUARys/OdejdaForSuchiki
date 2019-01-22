@@ -12,6 +12,9 @@ import com.example.mac.suchik.R;
 import com.example.mac.suchik.UI.settings_page.VH_weather_adapter;
 import com.example.mac.suchik.WeatherData.Forecasts;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class Weather_Adapter extends RecyclerView.Adapter<VH_weather_adapter> {
@@ -29,7 +32,22 @@ public class Weather_Adapter extends RecyclerView.Adapter<VH_weather_adapter> {
     }
 
     public void onBindViewHolder(VH_weather_adapter holder, int position) {
-        holder.tv.setText(String.valueOf(mData.get(position).getParts().getDay().getTemp_avg()));
+        //String date = "Fri, 22 Apr 2016 15:29:51 +0600";
+        //String date = "2019-01-22";
+
+        String strCurrentDate = mData.get(position).getDate();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date newDate = null;
+        try {
+            newDate = format.parse(strCurrentDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        format = new SimpleDateFormat("dd-MM");
+        String date = format.format(newDate);
+        holder.date.setText(date);
+        holder.temp_avg.setText(String.valueOf(mData.get(position).getParts().getDay().getTemp_avg()));
     }
 
     @Override
