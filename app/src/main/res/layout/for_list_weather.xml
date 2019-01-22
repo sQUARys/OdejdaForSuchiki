@@ -13,6 +13,7 @@
         android:layout_height="35dp"
         android:layout_marginTop="15dp"
         android:layout_toRightOf="@+id/part_of_sun"
+        android:textAlignment="center"
         android:text="Четверг" />
 
     <TextView

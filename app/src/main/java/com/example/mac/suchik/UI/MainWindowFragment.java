@@ -115,61 +115,63 @@ public class MainWindowFragment extends Fragment implements Callbacks {
         String condition = weather.getCondition();
         Log.d("weather", condition);
         switch (condition){
-                case "clear":
+            case "clear":
                 weather_cloud.setImageResource(R.drawable.sunny);
                 break;
-                case "partly-cloudy ":
+            case "partly-cloudy ":
                 weather_cloud.setImageResource(R.drawable.cloud);
                 break;
-                case "cloudy":
+            case "cloudy":
                 weather_cloud.setImageResource(R.drawable.cloud);
                 break;
-                case "overcast":
+            case "overcast":
                 weather_cloud.setImageResource(R.drawable.cloud);
                 break;
-                case "partly-cloudy-and-light-rain":
-                weather_cloud.setImageResource(R.drawable.snowing);
-                break;
-                case "partly-cloudy-and-rain":
+            case "partly-cloudy-and-light-rain":
                 weather_cloud.setImageResource(R.drawable.rain);
                 break;
-                case "overcast-and-rain":
+            case "partly-cloudy-and-rain":
+                weather_cloud.setImageResource(R.drawable.rain);
+                break;
+            case "overcast-and-rain":
+                weather_cloud.setImageResource(R.drawable.rain);
+                break;
+            case "overcast-thunderstorms-with-rain":
+                weather_cloud.setImageResource(R.drawable.rain);
+                break;
+            case "cloudy-and-light-rain":
+                weather_cloud.setImageResource(R.drawable.rain);
+                break;
+            case "overcast-and-light-rain":
+                weather_cloud.setImageResource(R.drawable.rain);
+                break;
+            case "cloudy-and-rain":
+                weather_cloud.setImageResource(R.drawable.rain);
+                break;
+            case "overcast-and-wet-snow":
                 weather_cloud.setImageResource(R.drawable.snowing);
                 break;
-                case "overcast-thunderstorms-with-rain":
+            case "partly-cloudy-and-light-snow":
                 weather_cloud.setImageResource(R.drawable.snowing);
                 break;
-                case "cloudy-and-light-rain":
+            case "partly-cloudy-and-snow":
                 weather_cloud.setImageResource(R.drawable.snowing);
                 break;
-                case "overcast-and-light-rain":
+            case "overcast-and-snow":
                 weather_cloud.setImageResource(R.drawable.snowing);
                 break;
-                case "cloudy-and-rain":
+            case "cloudy-and-light-snow":
                 weather_cloud.setImageResource(R.drawable.snowing);
                 break;
-                case "overcast-and-wet-snow":
+            case "overcast-and-light-snow":
                 weather_cloud.setImageResource(R.drawable.snowing);
                 break;
-                case "partly-cloudy-and-light-snow":
-                weather_cloud.setImageResource(R.drawable.snowing);
-                break;
-                case "partly-cloudy-and-snow":
-                weather_cloud.setImageResource(R.drawable.snowing);
-                break;
-                case "overcast-and-snow":
-                weather_cloud.setImageResource(R.drawable.snowing);
-                break;
-                case "cloudy-and-light-snow":
-                weather_cloud.setImageResource(R.drawable.snowing);
-                break;
-                case "overcast-and-light-snow":
-                weather_cloud.setImageResource(R.drawable.snowing);
-                break;
-                case "cloudy-and-snow":
+            case "cloudy-and-snow":
                 weather_cloud.setImageResource(R.drawable.snowing);
                 break;
         }
+
+
     }
     @Override
     public void onLoad(Response response) {
@@ -204,7 +206,7 @@ public class MainWindowFragment extends Fragment implements Callbacks {
 //                       Log.d("forcast", String.valueOf(forecast.getParts().getDay().getTemp_avg()));
 //                   }
 //               }
-                rv.setAdapter(new Weather_Adapter(forecasts));
+                rv.setAdapter(new Weather_Adapter(forecasts.subList(1 , 8)));
                 break;
             case ResponseType.GEOERROR:
                 mStorage.setPosition("50", "50");
