@@ -7,10 +7,11 @@ import android.widget.TextView;
 import com.example.mac.suchik.R;
 
 public class VH_weather_adapter extends RecyclerView.ViewHolder {
-    public TextView tv;
+    public TextView date, temp_avg;
 
     public VH_weather_adapter(View itemView) {
         super(itemView);
-        tv = itemView.findViewById(R.id.for_main);
+        date = itemView.findViewById(R.id.for_main);
+        temp_avg = itemView.findViewById(R.id.temp_avg);
     }
 }
