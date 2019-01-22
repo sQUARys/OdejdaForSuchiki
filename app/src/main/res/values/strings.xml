@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Delete</string>
     <string name="weather_preferences">weather</string>
+    <string name="notification_title">asas</string>
+    <string name="notification_text">idi lesom</string>
+    <string name="alarm_on_toast">lalka</string>
+    <string name="alarm_off_toast">lylka</string>
 </resources>
