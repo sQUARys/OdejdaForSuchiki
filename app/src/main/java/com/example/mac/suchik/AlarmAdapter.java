@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.mac.suchik.AlarmHolder;
 import com.example.mac.suchik.R;
+import com.example.mac.suchik.UI.main_window.RecomendationListAdapter;
 import com.example.mac.suchik.UI.settings_page.VH;
 
 import java.util.ArrayList;
@@ -18,9 +19,12 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmHolder> {
     TextView second;
     private ArrayList<AlarmClock> mData;
     private View view;
-
-    public AlarmAdapter(ArrayList<AlarmClock> data) {
+    private Alarms alarms;
+    private RecyclerView rv;
+    public AlarmAdapter(ArrayList<AlarmClock> data, Alarms alarms, RecyclerView rv) {
         mData = data;
+        this.alarms = alarms;
+        this.rv = rv;
     }
 
     @Override
@@ -31,15 +35,16 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmHolder> {
     }
 
     class ClickListener implements View.OnClickListener {
-        private int i;
-        ClickListener(int i){
-            this.i = i;
+        private int id;
+
+        ClickListener(int id){
+            this.id = id;
         }
 
         @Override
         public void onClick(View v) {
-            final Alarms alarms = new Alarms(view.getContext());
-            alarms.removeNotification(Integer.parseInt(mData.get(i).getId()));
+            alarms.removeNotification(Integer.parseInt(mData.get(id).getId()), id);
+            rv.setAdapter(new AlarmAdapter(alarms.getAlarmsClock(), alarms, rv));
         }
     }
 
@@ -56,10 +61,8 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmHolder> {
     }
 
 
-    public void setList(List<AlarmClock> new_elements){
+    public void setList(ArrayList<AlarmClock> new_elements){
         mData.clear();
         mData.addAll(new_elements);
     }
-
-
 }

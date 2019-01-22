@@ -36,60 +36,65 @@ import java.util.Date;
 import java.util.List;
 
 public class Schedule extends Fragment {
-  TextView tv;
-  Button alarm_on, alarm_off;
-  TimePicker timePicker;
-  RecyclerView rv;
-  public String[] aStrings = new String[]{
-          "dasdsgsa",
-          "sg",
-          "gsg",
-          "dfdfsgdsg"
-  };
+    TextView tv;
+    Button alarm_on, alarm_off;
+    TimePicker timePicker;
+    RecyclerView rv;
+    Alarms alarms;
+    public String[] aStrings = new String[]{
+            "dasdsgsa",
+            "sg",
+            "gsg",
+            "dfdfsgdsg"
+    };
 
-  @Nullable
-  @Override
-  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.schedule, container, false);
+    @Override
+    public void onStop() {
+        super.onStop();
+        alarms.SaveData();
+    }
 
-  }
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.schedule, container, false);
 
-  @Override
-  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    super.onCreateOptionsMenu(menu, inflater);
-    inflater.inflate(R.menu.main_menu, menu);
-  }
+    }
 
-  @Override
-  public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    rv = view.findViewById(R.id.listOfAlarms);
-    tv = view.findViewById(R.id.updateTimeText);
-    alarm_on = view.findViewById(R.id.alarm_on);
-    alarm_off = view.findViewById(R.id.alarm_off);
-    final Alarms alarms = new Alarms(view.getContext());
-    timePicker = view.findViewById(R.id.timePicker);
-    alarm_on.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        alarms.createNotification(timePicker.getCurrentHour(), timePicker.getCurrentMinute());
-      }
-    });
-    alarm_off.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        alarms.removeAllNotification();
-      }
-    });
-    view.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Toast.makeText(view.getContext(), alarms.getInfo(), Toast.LENGTH_SHORT).show();
-      }
-    });
-    rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-    if (alarms.getAlarmsClock().getAlarmClock() == null)
-      rv.setAdapter(new AlarmAdapter(new ArrayList<AlarmClock>()));
-    else rv.setAdapter(new AlarmAdapter(alarms.getAlarmsClock().getAlarmClock()));
-  }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main_menu, menu);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        rv = view.findViewById(R.id.listOfAlarms);
+        tv = view.findViewById(R.id.updateTimeText);
+        alarm_on = view.findViewById(R.id.alarm_on);
+        alarm_off = view.findViewById(R.id.alarm_off);
+        alarms = new Alarms(view.getContext());
+        timePicker = view.findViewById(R.id.timePicker);
+        alarm_on.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alarms.createNotification(timePicker.getCurrentHour(), timePicker.getCurrentMinute());
+                AlarmAdapter alarmAdapter = new AlarmAdapter(alarms.getAlarmsClock(), alarms, rv);
+                rv.setAdapter(alarmAdapter);
+            }
+        });
+        alarm_off.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alarms.removeAllNotification();
+                AlarmAdapter alarmAdapter = new AlarmAdapter(alarms.getAlarmsClock(), alarms, rv);
+                rv.setAdapter(alarmAdapter);
+            }
+        });
+        rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        if (alarms.getAlarmsClock() == null)
+            rv.setAdapter(new AlarmAdapter(new ArrayList<AlarmClock>(), alarms, rv));
+        else rv.setAdapter(new AlarmAdapter(alarms.getAlarmsClock(), alarms, rv));
+    }
 }
