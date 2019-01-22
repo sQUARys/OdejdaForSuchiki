@@ -182,9 +182,9 @@ public class MainWindowFragment extends Fragment implements Callbacks {
                 break;
             case ResponseType.WTODAY:
                 Fact f = (Fact) response.response;
+                mStorage.getClothes(f);
                 onWeatherDataUpdated(f);
                 onChangedWeatherDraw(f);
-                mStorage.getClothes(f);
                 break;
             case ResponseType.COMMUNITY:
                 String community = (String) response.response;
