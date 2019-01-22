@@ -73,6 +73,7 @@ public class MainWindowFragment extends Fragment implements Callbacks {
 
         Geoposition geoposition = new Geoposition(getContext());
         String[] position = geoposition.start();
+        //mStorage.setPosition("55.45", "37.36");
         mStorage.setPosition(position[0], position[1]);
         mStorage.updateWeather(false);
     }
@@ -106,7 +107,7 @@ public class MainWindowFragment extends Fragment implements Callbacks {
         if(weather.getTemp() > 0)
         temperature.setText(String.format("+" + "%f", weather.getTemp()));
         else if (weather.getTemp() < 0)
-            temperature.setText(String.format("-" + "%f" , weather.getTemp()));
+            temperature.setText(String.format("%f" , weather.getTemp()));
         else temperature.setText("0");
     }
     public void onChangedWeatherDraw(Fact weather){
@@ -178,7 +179,7 @@ public class MainWindowFragment extends Fragment implements Callbacks {
                 String[] position = (String[]) response.response;
                 Log.d("position", position[0] + " " + position[1]);
                 //mStorage.getWeatherToday();
-                //mStorage.getCurrentCommunity();
+                mStorage.getCurrentCommunity();
                 break;
             case ResponseType.WTODAY:
                 Fact f = (Fact) response.response;

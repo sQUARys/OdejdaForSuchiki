@@ -12,6 +12,10 @@
     <TextView
         android:id="@+id/date"
         android:layout_width="170sp"
+        android:outlineSpotShadowColor="#000000"
+        android:shadowDx="4"
+        android:shadowDy="4"
+        android:shadowRadius="5"
         android:textAlignment="center"
         android:layout_height="wrap_content"
         android:textColor="#000"

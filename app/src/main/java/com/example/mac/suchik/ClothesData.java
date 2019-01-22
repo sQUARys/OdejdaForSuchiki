@@ -1,7 +1,7 @@
 package com.example.mac.suchik;
 
 public class ClothesData {
-    public String category;
+    public int category;
     public String name;
     public int minTemp;
     public int maxTemp;

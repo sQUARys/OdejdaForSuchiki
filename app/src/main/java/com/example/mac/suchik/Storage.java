@@ -99,11 +99,9 @@ public class Storage implements Callbacks{
 
     public void getClothes(Fact weather) {
         if (!executed.get("GC")) {
-            if (response == null)
-                updateWeather(false);
-            else
                 executed.put("GC", true);
                 new GetClothes(mCtx, Storage.this, weather).execute();
+                executed.put("GC", true);
         }
     }
     public void setPosition(String lat, String lon){
@@ -200,6 +198,8 @@ public class Storage implements Callbacks{
                 }
                 break;
             case ResponseType.WTODAY:
+                this.response = (WeatherData) response.response;
+                getClothes(this.response.getFact());
                 if (type_callback_rels.get(ResponseType.WTODAY) == null)
                     type_callback_rels.put(ResponseType.WTODAY, new ArrayList<Callbacks>());
                 list = type_callback_rels.get(ResponseType.WTODAY);
