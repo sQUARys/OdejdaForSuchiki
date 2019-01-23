@@ -1,39 +1,26 @@
 package com.example.mac.suchik.UI;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.example.mac.suchik.AlarmAdapter;
 import com.example.mac.suchik.AlarmClock;
 import com.example.mac.suchik.Alarms;
 import com.example.mac.suchik.R;
-import com.example.mac.suchik.UI.main_window.RecomendationListAdapter;
-import com.example.mac.suchik.UI.settings_page.TimesListAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 public class Schedule extends Fragment {
     TextView tv;
@@ -41,17 +28,12 @@ public class Schedule extends Fragment {
     TimePicker timePicker;
     RecyclerView rv;
     Alarms alarms;
-    public String[] aStrings = new String[]{
-            "dasdsgsa",
-            "sg",
-            "gsg",
-            "dfdfsgdsg"
-    };
+    private AlarmAdapter alarmAdapter;
 
     @Override
     public void onStop() {
         super.onStop();
-        alarms.SaveData();
+        alarms.saveData();
     }
 
     @Nullable
@@ -79,22 +61,22 @@ public class Schedule extends Fragment {
         alarm_on.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarms.createNotification(timePicker.getCurrentHour(), timePicker.getCurrentMinute());
-                AlarmAdapter alarmAdapter = new AlarmAdapter(alarms.getAlarmsClock(), alarms, rv);
-                rv.setAdapter(alarmAdapter);
+                ArrayList<AlarmClock> alarmClocks = alarms.getAlarmsClock();
+                if (!alarms.createNotification(timePicker.getCurrentHour(), timePicker.getCurrentMinute()))
+                    alarmAdapter.notifyDataSetChanged();
             }
         });
         alarm_off.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alarms.removeAllNotification();
-                AlarmAdapter alarmAdapter = new AlarmAdapter(alarms.getAlarmsClock(), alarms, rv);
-                rv.setAdapter(alarmAdapter);
+                alarmAdapter.setList(new ArrayList<AlarmClock>());
+                alarmAdapter.notifyDataSetChanged();
+
             }
         });
         rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        if (alarms.getAlarmsClock() == null)
-            rv.setAdapter(new AlarmAdapter(new ArrayList<AlarmClock>(), alarms, rv));
-        else rv.setAdapter(new AlarmAdapter(alarms.getAlarmsClock(), alarms, rv));
+        alarmAdapter = new AlarmAdapter(alarms);
+        rv.setAdapter(alarmAdapter);
     }
 }

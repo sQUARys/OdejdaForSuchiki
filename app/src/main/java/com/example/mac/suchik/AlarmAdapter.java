@@ -18,19 +18,15 @@ import java.util.List;
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmHolder> {
     TextView second;
     private ArrayList<AlarmClock> mData;
-    private View view;
     private Alarms alarms;
-    private RecyclerView rv;
-    public AlarmAdapter(ArrayList<AlarmClock> data, Alarms alarms, RecyclerView rv) {
-        mData = data;
+    public AlarmAdapter(Alarms alarms) {
+        mData = alarms.getAlarmsClock();
         this.alarms = alarms;
-        this.rv = rv;
     }
 
     @Override
     public AlarmHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.alarm_layout, parent, false);
-        this.view = view;
         return new AlarmHolder(view);
     }
 
@@ -44,7 +40,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmHolder> {
         @Override
         public void onClick(View v) {
             alarms.removeNotification(Integer.parseInt(mData.get(id).getId()), id);
-            rv.setAdapter(new AlarmAdapter(alarms.getAlarmsClock(), alarms, rv));
+            notifyDataSetChanged();
         }
     }
 

@@ -38,9 +38,6 @@ public class Alarms {
         mNotificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
         alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
         sp = context.getSharedPreferences("alarms", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor edit = sp.edit();
-//        edit.putString("alarms", "");
-//        edit.commit();
         if (sp.getString("alarms", "").equals(""))
             arcl = new ArrayList<>();
         else
@@ -51,7 +48,7 @@ public class Alarms {
         return arcl;
     }
 
-    public void createNotification(int hours, int mins) {
+    public boolean createNotification(int hours, int mins) {
         int nowID = (int) SystemClock.elapsedRealtime();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hours);
@@ -72,7 +69,7 @@ public class Alarms {
             calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent);
             arcl.add(new AlarmClock(dateFormat.format(calendar.getTime()), nowID + ""));
         }
-
+        return exist;
     }
 
     public void removeAllNotification() {
@@ -92,7 +89,7 @@ public class Alarms {
         arcl.remove(elementID);
     }
 
-    public void SaveData() {
+    public void saveData() {
         SharedPreferences.Editor edit = sp.edit();
         AlarmsClock s = new AlarmsClock();
         s.setAlarmClock(arcl);
