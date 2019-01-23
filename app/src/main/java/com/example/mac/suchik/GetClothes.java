@@ -138,6 +138,7 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
                     item += "Цвет: " + c.getString(colorColIndex);
                 }
                 String category = c.getString(categoryColIndex);
+                item += category;
                 if (clothes.containsKey(category)) {
                     clothes.get(category).add(item);
                 } else {

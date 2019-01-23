@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -56,10 +57,11 @@
             android:id="@+id/promokaet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:text="Промокает?"
             android:textColor="#000000"
             android:textSize="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner_temp" />
 
@@ -117,6 +119,7 @@
             android:id="@+id/produvaet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:text="Продувается?"
             android:textColor="#000000"
@@ -177,6 +180,7 @@
             android:id="@+id/zashishaet_ot_solnca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:text="Защищает от солнца?"
             android:textColor="#000000"
@@ -247,8 +251,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
             android:text="Добавить"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/color" />
 
 
