@@ -210,7 +210,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
                 String community = res[2];
                 Log.d("community", "community = " + community);
                 if (!first) {
-                    arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, new ArrayList(){{
+                    arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, new ArrayList<String>(){{
                         add(res[2]);
                         add("Москва");
                         add("Рыбинск");
