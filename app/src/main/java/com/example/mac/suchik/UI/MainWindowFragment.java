@@ -62,8 +62,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
     private HashMap<Integer, String[]> CityPos = new HashMap<Integer, String[]>(){{
         put(0, new String[]{"50", "36"});
         put(1, new String[]{"55.7522200", "37.6155600"});
-        put(2, new String[]{"80", "80"});
-        put(3, new String[]{"58.0446000", "38.8425900"});
+        put(2, new String[]{"58.0446000", "38.8425900"});
     }};
     private List<String> cities = new LinkedList<String>(){{
         add("Москва");
@@ -217,7 +216,6 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
                         add(res[2]);
                         add("Москва");
                         add("Рыбинск");
-                        add("Шляпа");
                     }});
                     CityPos.put(0, new String[]{res[0], res[1]});
                     cities.add(res[2]);

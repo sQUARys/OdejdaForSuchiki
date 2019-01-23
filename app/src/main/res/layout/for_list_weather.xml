@@ -9,9 +9,9 @@
 
     <TextView
         android:id="@+id/for_main"
-        android:layout_width="120dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
+        android:textSize="20dp"
         android:layout_marginTop="3dp"
         android:text="Четверг"
         android:textAlignment="center" />
@@ -25,14 +25,14 @@
     <!--android:layout_below="@+id/part_of_sun"/>-->
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:layout_below="@+id/part_of_sun"
         android:id="@+id/temp_avg"
-        android:textSize="30sp" />
+        android:textSize="20sp" />
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_below="@+id/for_main"
         android:src="@drawable/sunny"
         android:id="@+id/part_of_sun" />
