@@ -43,6 +43,6 @@ public class Settings extends Fragment {
         rv = view.findViewById(R.id.settings_rv);
         tv = view.findViewById(R.id.settings);
         rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        rv.setAdapter(new RecomendationListAdapter(Arrays.asList(sString)));
+        //rv.setAdapter(new RecomendationListAdapter(Arrays.asList(sString)));
     }
 }

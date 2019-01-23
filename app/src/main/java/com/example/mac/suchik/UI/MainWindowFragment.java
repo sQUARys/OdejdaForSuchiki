@@ -44,6 +44,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class MainWindowFragment extends Fragment implements Callbacks, AdapterView.OnItemSelectedListener {
     public static Storage mStorage;
@@ -71,6 +72,8 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
     private ProgressBar progressBar;
 
     private Fact f;
+
+    String dateText;
 
     @Nullable
     @Override
@@ -104,6 +107,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         progressBar = view.findViewById(R.id.progress_bar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
         spinnerCity = view.findViewById(R.id.city);
@@ -113,13 +117,12 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
         rv_clothes = view.findViewById(R.id.for_recommendation_list);
         date = view.findViewById(R.id.date);
         rv_clothes.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         List<String> data = new ArrayList<>();
 
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         Date currentDate = new Date();
-        String dateText = dateFormat.format(currentDate);
-        date.setText(dateText);
+        dateText = dateFormat.format(currentDate);
     }
 
     public void onWeatherDataUpdated(Fact weather) {
@@ -235,7 +238,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
                 rv_clothes.setAdapter(new RecomendationListAdapter(recommendations));
                 onChangedWeatherDraw(f);
                 onWeatherDataUpdated(f);
-                progressBar.setVisibility(ProgressBar.INVISIBLE);
+                //progressBar.setVisibility(ProgressBar.INVISIBLE);
                 break;
             case ResponseType.WFORECASTS:
                 List<Forecasts> forecasts = (List<Forecasts>) response.response;
@@ -248,6 +251,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
 //               }
                 rv.setAdapter(new Weather_Adapter(forecasts.subList(1 , 8)));
                 progressBar.setVisibility(ProgressBar.INVISIBLE);
+                date.setText(dateText);
                 break;
             case ResponseType.GEOERROR:
                 mStorage.setPosition("50", "50");

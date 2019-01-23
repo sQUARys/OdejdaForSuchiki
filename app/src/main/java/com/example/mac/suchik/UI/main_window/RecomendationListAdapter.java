@@ -1,6 +1,7 @@
 package com.example.mac.suchik.UI.main_window;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,43 @@ public class RecomendationListAdapter extends RecyclerView.Adapter<VH> {
     }
 
     public void onBindViewHolder(VH holder, int position) {
-        holder.tv1.setText(mData.get(position));
+        String category = mData.get(position).substring(mData.get(position).length() - 1);
+        String name;
+        name = mData.get(position).substring(0, mData.get(position).length() - 1);
+        Log.d("Clothes", "category = " + category);
+        switch (Integer.valueOf(category)){
+            case 0:
+                holder.category.setImageResource(R.drawable.head);
+                break;
+            case 1:
+                holder.category.setImageResource(R.drawable.glove);
+                break;
+            case 2:
+                holder.category.setImageResource(R.drawable.scarf);
+                break;
+            case 3:
+                holder.category.setImageResource(R.drawable.coat);
+                break;
+            case 4:
+                holder.category.setImageResource(R.drawable.jeans);
+                break;
+            case 5:
+                holder.category.setImageResource(R.drawable.shirt);
+                break;
+            case 6:
+                holder.category.setImageResource(R.drawable.boot);
+                break;
+            case 9:
+                holder.category.setImageResource(R.drawable.eyeglasses);
+                break;
+            case 7:
+                holder.category.setImageResource(R.drawable.joggerpants);
+                break;
+            case 8:
+                holder.category.setImageResource(R.drawable.sweater);
+                break;
+        }
+        holder.tv1.setText(name);
     }
 
     @Override
@@ -46,5 +83,4 @@ public class RecomendationListAdapter extends RecyclerView.Adapter<VH> {
 
 
 }
-
 
