@@ -15,8 +15,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.mac.suchik.Callbacks;
@@ -35,10 +38,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class MainWindowFragment extends Fragment implements Callbacks {
+public class MainWindowFragment extends Fragment implements Callbacks, AdapterView.OnItemSelectedListener {
     public static final int SCHEDULE_WINDOW_FRAGMENT = 1;
     public static Storage mStorage;
     private TextView city_name;
@@ -53,6 +57,11 @@ public class MainWindowFragment extends Fragment implements Callbacks {
     private String city;
     private String mylist;
     RecomendationListAdapter recomendationListAdapter;
+    private HashMap<Integer, String[]> CityPos = new HashMap<Integer, String[]>(){{
+        put(1, new String[]{"55.7522200", "37.6155600"});
+        put(2, new String[]{"80", "80"});
+        put(3, new String[]{"58.0446000", "38.8425900"});
+    }};
 
     private ProgressBar progressBar;
 
@@ -93,6 +102,13 @@ public class MainWindowFragment extends Fragment implements Callbacks {
         super.onViewCreated(view, savedInstanceState);
         progressBar = view.findViewById(R.id.progress_bar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
+
+        ArrayAdapter<?> adapterTemp =
+                ArrayAdapter.createFromResource(getContext(), R.array.temperature, android.R.layout.simple_spinner_item);
+        adapterTemp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinnerTemp = view.findViewById(R.id.city);
+        spinnerTemp.setAdapter(adapterTemp);
+        spinnerTemp.setOnItemSelectedListener(this);
 
         city_name = view.findViewById(R.id.city_name);
         temperature = view.findViewById(R.id.temperature);
@@ -230,5 +246,19 @@ public class MainWindowFragment extends Fragment implements Callbacks {
                 (getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (position != 0) {
+            String[] pos = CityPos.get(position);
+            mStorage.setPosition(pos[0], pos[1]);
+            mStorage.getCurrentCommunity();
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
