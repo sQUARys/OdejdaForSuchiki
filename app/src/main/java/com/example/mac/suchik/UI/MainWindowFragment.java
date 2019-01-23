@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.le.AdvertiseSettings;
 import android.content.pm.PackageManager;
+import android.hardware.camera2.CaptureRequest;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,30 +40,34 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class MainWindowFragment extends Fragment implements Callbacks, AdapterView.OnItemSelectedListener {
-    public static final int SCHEDULE_WINDOW_FRAGMENT = 1;
     public static Storage mStorage;
-    private TextView city_name;
     private TextView date;
     private ImageView weather_cloud;
     private TextView temperature;
-    private TextView temp_avg;
-    private TextView weather_cloud_description;
-    private Geoposition geoposition;
     private RecyclerView rv;
     private RecyclerView rv_clothes;
-    private String city;
-    private String mylist;
-    RecomendationListAdapter recomendationListAdapter;
+    private Spinner spinnerCity;
+
+    private String[] position;
+    private ArrayAdapter arrayAdapter;
+    private boolean first;
+
     private HashMap<Integer, String[]> CityPos = new HashMap<Integer, String[]>(){{
+        put(0, new String[]{"50", "36"});
         put(1, new String[]{"55.7522200", "37.6155600"});
         put(2, new String[]{"80", "80"});
         put(3, new String[]{"58.0446000", "38.8425900"});
     }};
-
+    private List<String> cities = new LinkedList<String>(){{
+        add("Москва");
+        add("Рыбинск");
+    }};
     private ProgressBar progressBar;
 
     private Fact f;
@@ -79,7 +84,6 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
         mStorage.subscribe(ResponseType.CLOTHES, this);
         mStorage.subscribe(ResponseType.WFORECASTS, this);
         return inflater.inflate(R.layout.main_window, container, false);
-
     }
     @Override
     public void onStart() {
@@ -102,18 +106,9 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
         super.onViewCreated(view, savedInstanceState);
         progressBar = view.findViewById(R.id.progress_bar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
-
-        ArrayAdapter<?> adapterTemp =
-                ArrayAdapter.createFromResource(getContext(), R.array.temperature, android.R.layout.simple_spinner_item);
-        adapterTemp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner spinnerTemp = view.findViewById(R.id.city);
-        spinnerTemp.setAdapter(adapterTemp);
-        spinnerTemp.setOnItemSelectedListener(this);
-
-        city_name = view.findViewById(R.id.city_name);
+        spinnerCity = view.findViewById(R.id.city);
         temperature = view.findViewById(R.id.temperature);
         weather_cloud = view.findViewById(R.id.weather_cloud);
-        temp_avg = view.findViewById(R.id.temp_avg);
         rv = view.findViewById(R.id.recommendation_list);
         rv_clothes = view.findViewById(R.id.for_recommendation_list);
         date = view.findViewById(R.id.date);
@@ -200,10 +195,10 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
     public void onLoad(Response response) {
         switch (response.type) {
             case ResponseType.GGEOPOSITION:
-                String[] position = (String[]) response.response;
+                position = (String[]) response.response;
                 Log.d("position", position[0] + " " + position[1]);
                 //mStorage.getWeatherToday();
-                mStorage.getCurrentCommunity();
+                mStorage.setPosition(position[0], position[1]);
                 break;
             case ResponseType.WTODAY:
                 f = (Fact) response.response;
@@ -211,9 +206,29 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
 
                 break;
             case ResponseType.COMMUNITY:
-                String community = (String) response.response;
-                city_name.setText(community);
+                final String[] res = (String[]) response.response;
+                String community = res[2];
                 Log.d("community", "community = " + community);
+                if (!first) {
+                    arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, new ArrayList(){{
+                        add(res[2]);
+                        add("Москва");
+                        add("Рыбинск");
+                        add("Шляпа");
+                    }});
+                    CityPos.put(0, new String[]{res[0], res[1]});
+                    cities.add(res[2]);
+                    spinnerCity.setAdapter(arrayAdapter);
+                    spinnerCity.setOnItemSelectedListener(this);
+                    first = true;
+                }
+                else {
+                    if (!res[2].equals("") && !cities.contains(res[2])) {
+                        arrayAdapter.add(res[2]);
+                        cities.add(res[2]);
+                        CityPos.put(CityPos.size(), new String[]{res[0], res[1]});
+                    }
+                }
                 break;
             case ResponseType.CLOTHES:
                 ArrayList<String> recommendations = (ArrayList<String>) response.response;
@@ -250,11 +265,9 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (position != 0) {
-            String[] pos = CityPos.get(position);
-            mStorage.setPosition(pos[0], pos[1]);
-            mStorage.getCurrentCommunity();
-        }
+        String[] pos = CityPos.get(position);
+        mStorage.setPosition(pos[0], pos[1]);
+        mStorage.getCurrentCommunity();
     }
 
     @Override

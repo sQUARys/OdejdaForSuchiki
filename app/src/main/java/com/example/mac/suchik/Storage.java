@@ -45,7 +45,6 @@ public class Storage implements Callbacks{
             put("GT", false);
             put("GF", false);
             put("GC", false);
-            put("GCC", false);
         }};
         if (!Objects.equals(sp.getString("weather", null), null)){
             response =  gson.fromJson(sp.getString("weather", null),
@@ -89,12 +88,10 @@ public class Storage implements Callbacks{
     }
 
     public void getCurrentCommunity() {
-        if (!executed.get("GCC")) {
             if (position != null) {
                 executed.put("GCC", true);
                 new Community(mCtx, position, Storage.this).execute();
             }
-        }
     }
 
     public void getClothes(Fact weather) {
@@ -252,7 +249,6 @@ public class Storage implements Callbacks{
                 for (Callbacks callbacks: list) {
                     callbacks.onLoad(response);
                 }
-                executed.put("GCC", false);
                 break;
         }
         if (response.type == ResponseType.GETW){
