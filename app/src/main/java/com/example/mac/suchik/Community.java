@@ -26,12 +26,12 @@ public class Community extends AsyncTask<Void, Void, Response> {
 
     protected Response doInBackground(Void... voids) {
         Geocoder geocoder = new Geocoder(mCtx, Locale.getDefault());
-        String result = null;
+        String[] result = new String[]{lat + "", lng + "", ""};
         try {
             List<Address> list = geocoder.getFromLocation(lat, lng, 1);
             if (list != null && list.size() > 0) {
                 Address address = list.get(0);
-                result = address.getLocality();
+                result[2] = address.getLocality();
                 //Log.d("Community", result);
             }
         } catch (IOException e) {

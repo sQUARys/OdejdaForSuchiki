@@ -62,8 +62,10 @@ public class Schedule extends Fragment {
             @Override
             public void onClick(View v) {
                 ArrayList<AlarmClock> alarmClocks = alarms.getAlarmsClock();
-                if (!alarms.createNotification(timePicker.getCurrentHour(), timePicker.getCurrentMinute()))
+                if (!alarms.createNotification(timePicker.getCurrentHour(), timePicker.getCurrentMinute())) {
+                    alarmAdapter.setList(alarmClocks);
                     alarmAdapter.notifyDataSetChanged();
+                }
             }
         });
         alarm_off.setOnClickListener(new View.OnClickListener() {
