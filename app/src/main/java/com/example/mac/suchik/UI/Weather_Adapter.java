@@ -50,7 +50,7 @@ public class Weather_Adapter extends RecyclerView.Adapter<VH_weather_adapter> {
         String date = format.format(newDate);
         holder.date.setText(date);
         Float s = mData.get(position).getParts().getDay().getTemp_avg();
-        holder.temp_avg.setText(s.toString());
+        holder.temp_avg.setText(s.toString() + "°С");
         String condition = mData.get(position).getParts().getDay().getCondition();
         switch (condition){
             case "clear":

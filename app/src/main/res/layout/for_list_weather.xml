@@ -3,32 +3,37 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="120dp"
     android:layout_height="wrap_content"
     android:id="@+id/for_list_weather">
 
     <TextView
         android:id="@+id/for_main"
         android:layout_width="70dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="15dp"
-        android:layout_toRightOf="@+id/part_of_sun"
-        android:textAlignment="center"
-        android:text="Четверг" />
+        android:layout_height="20dp"
+        android:layout_marginTop="3dp"
+        android:text="Четверг"
+        android:textAlignment="center" />
 
+    <!--<View-->
+    <!--android:id="@+id/line"-->
+    <!--android:layout_width="70dp"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:background="#000"-->
+    <!--android:layout_marginTop="3dp"-->
+    <!--android:layout_below="@+id/part_of_sun"/>-->
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/for_main"
-        android:layout_toRightOf="@+id/for_main"
+        android:layout_height="60dp"
+        android:layout_below="@+id/part_of_sun"
         android:id="@+id/temp_avg"
-        android:textSize="20sp" />
+        android:textSize="30sp" />
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/sunny"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/for_main"
+        android:src="@color/backgroundcolor"
         android:id="@+id/part_of_sun" />
 
 </RelativeLayout>
