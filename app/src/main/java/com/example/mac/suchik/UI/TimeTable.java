@@ -1,7 +1,11 @@
 package com.example.mac.suchik.UI;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,10 +32,12 @@ import com.example.mac.suchik.R;
 import com.example.mac.suchik.UI.main_window.RecomendationListAdapter;
 import com.example.mac.suchik.UI.settings_page.TimesListAdapter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class TimeTable extends Fragment implements AdapterView.OnItemSelectedListener, RadioGroup.OnCheckedChangeListener,
-        View.OnClickListener {
+        View.OnClickListener, ItemAdapter.ItemClickListener {
     private String name, color;
     private int category = 0;
     private int minT = 100;
@@ -50,8 +57,13 @@ public class TimeTable extends Fragment implements AdapterView.OnItemSelectedLis
 
     private ClothesData item;
 
+    private ItemAdapter adapter;
+
+    DBOperations dbOperations;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        dbOperations = new DBOperations(getContext());
         return inflater.inflate(R.layout.add_item_fragment, container, false);
     }
 
@@ -97,6 +109,17 @@ public class TimeTable extends Fragment implements AdapterView.OnItemSelectedLis
         Spinner spinnerTemp = (Spinner) view.findViewById(R.id.spinner_temp);
         spinnerTemp.setAdapter(adapterTemp);
         spinnerTemp.setOnItemSelectedListener(this);
+
+
+        ArrayList<String> items = dbOperations.getData("clothes", new String[]{"name"}, null, null, null, null, null);
+
+
+        RecyclerView recyclerView = view.findViewById(R.id.show_items);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new ItemAdapter(getContext(), items);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
+
     }
 
     @Override
@@ -179,6 +202,10 @@ public class TimeTable extends Fragment implements AdapterView.OnItemSelectedLis
             Toast.makeText(getContext(), "Введите название", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (minT == 100){
+            Toast.makeText(getContext(), "Введите температурный режим", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (rain == 100){
             Toast.makeText(getContext(), "Выберете водонепроницаемость", Toast.LENGTH_SHORT).show();
             return;
@@ -211,9 +238,36 @@ public class TimeTable extends Fragment implements AdapterView.OnItemSelectedLis
         item.color = color;
 
 
-        DBOperations dbOperations = new DBOperations(getContext());
+
         dbOperations.addItem(item);
 
         Toast.makeText(getContext(), "Добавлен элемент: " + item.name, Toast.LENGTH_SHORT).show();
+        adapter.setList(dbOperations.getData("clothes", new String[]{"name"}, null, null, null, null, null));
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        buildAlertMessage(adapter.getItem(position));
+        //Toast.makeText(getContext(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void buildAlertMessage(final String name) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Вы уверены, что хотите удалить этот элемент?")
+                .setCancelable(false)
+                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dbOperations.deleteItem(name);
+                        adapter.setList(dbOperations.getData("clothes", new String[]{"name"}, null, null, null, null, null));
+                    }
+                })
+                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 }

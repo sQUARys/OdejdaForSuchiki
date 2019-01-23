@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.mac.suchik.Callbacks;
@@ -53,6 +54,10 @@ public class MainWindowFragment extends Fragment implements Callbacks {
     private String mylist;
     RecomendationListAdapter recomendationListAdapter;
 
+    private ProgressBar progressBar;
+
+    private Fact f;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -86,6 +91,9 @@ public class MainWindowFragment extends Fragment implements Callbacks {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        progressBar = view.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+
         city_name = view.findViewById(R.id.city_name);
         temperature = view.findViewById(R.id.temperature);
         weather_cloud = view.findViewById(R.id.weather_cloud);
@@ -182,10 +190,9 @@ public class MainWindowFragment extends Fragment implements Callbacks {
                 mStorage.getCurrentCommunity();
                 break;
             case ResponseType.WTODAY:
-                Fact f = (Fact) response.response;
+                f = (Fact) response.response;
                 mStorage.getClothes(f);
-                onWeatherDataUpdated(f);
-                onChangedWeatherDraw(f);
+
                 break;
             case ResponseType.COMMUNITY:
                 String community = (String) response.response;
@@ -195,6 +202,9 @@ public class MainWindowFragment extends Fragment implements Callbacks {
             case ResponseType.CLOTHES:
                 ArrayList<String> recommendations = (ArrayList<String>) response.response;
                 rv_clothes.setAdapter(new RecomendationListAdapter(recommendations));
+                onChangedWeatherDraw(f);
+                onWeatherDataUpdated(f);
+                progressBar.setVisibility(ProgressBar.INVISIBLE);
                 break;
             case ResponseType.WFORECASTS:
                 List<Forecasts> forecasts = (List<Forecasts>) response.response;
@@ -206,6 +216,7 @@ public class MainWindowFragment extends Fragment implements Callbacks {
 //                   }
 //               }
                 rv.setAdapter(new Weather_Adapter(forecasts.subList(1 , 8)));
+                progressBar.setVisibility(ProgressBar.INVISIBLE);
                 break;
             case ResponseType.GEOERROR:
                 mStorage.setPosition("50", "50");

@@ -39,7 +39,7 @@
             android:layout_marginTop="15dp"
             android:hint="Введите название"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_category" />
+            app:layout_constraintTop_toBottomOf="@+id/spinner_category"/>
 
         <Spinner
             android:id="@+id/spinner_temp"
@@ -56,7 +56,6 @@
             android:id="@+id/promokaet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
             android:layout_marginTop="15dp"
             android:text="Промокает?"
             android:textColor="#000000"
@@ -241,7 +240,7 @@
             android:layout_marginTop="15dp"
             android:hint="Введите цвет"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cloud" />
+            app:layout_constraintTop_toBottomOf="@+id/cloud"/>
 
         <Button
             android:id="@+id/add_item"
@@ -252,13 +251,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/color" />
 
-        <TextView
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/show_items"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="15dp"
-            android:layout_below="@id/add_item"
-            android:textSize="200dp"
-            android:text="HELLO"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_item"/>
     </android.support.constraint.ConstraintLayout>
