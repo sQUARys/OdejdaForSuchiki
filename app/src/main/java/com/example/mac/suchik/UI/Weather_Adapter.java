@@ -56,7 +56,7 @@ public class Weather_Adapter extends RecyclerView.Adapter<VH_weather_adapter> {
             case "clear":
                 holder.im.setImageResource(R.drawable.sunny);
                 break;
-            case "partly-cloudy ":
+            case "partly-cloudy":
                 holder.im.setImageResource(R.drawable.cloud);
                 break;
             case "cloudy":

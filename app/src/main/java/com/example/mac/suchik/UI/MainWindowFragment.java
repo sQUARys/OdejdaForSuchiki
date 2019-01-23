@@ -127,9 +127,9 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
 
     public void onWeatherDataUpdated(Fact weather) {
         if(weather.getTemp() > 0)
-        temperature.setText(String.format("+" + "%f", weather.getTemp()));
+        temperature.setText(String.format("+" + "%.1f" + "°С", weather.getTemp()));
         else if (weather.getTemp() < 0)
-            temperature.setText(String.format("%f" , weather.getTemp()));
+            temperature.setText(String.format("%.1f °С", weather.getTemp()));
         else temperature.setText("0");
     }
     public void onChangedWeatherDraw(Fact weather){
@@ -139,7 +139,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
             case "clear":
                 weather_cloud.setImageResource(R.drawable.sunny);
                 break;
-            case "partly-cloudy ":
+            case "partly-cloudy":
                 weather_cloud.setImageResource(R.drawable.cloud);
                 break;
             case "cloudy":
