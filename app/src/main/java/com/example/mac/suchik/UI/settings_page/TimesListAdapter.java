@@ -20,7 +20,7 @@ public class TimesListAdapter extends RecyclerView.Adapter<VH> {
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.settings_rv, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recomendation_list_element, parent, false);
         return new VH(view);
     }
 

@@ -21,27 +21,38 @@ public class DBOperations {
         db = new DB(mCtx);
         db.open();
 
-        Cursor c = db.getData("categories", new String[]{db.CATEGORY_COLUMN_ID}, db.CATEGORY_COLUMN_NAME + " = ?",
-                new String[]{item.category}, null, null, null);
 
+        db.addRec(item.category, item.name, item.minTemp, item.maxTemp, item.rain, item.wind, item.cloud, item.color);
+
+
+        Cursor c = db.getAllData("clothes");
         if (c.moveToFirst()) {
-            int idColIndex = c.getColumnIndex(db.CATEGORY_COLUMN_ID);
-            id = c.getInt(idColIndex);
 
+            // определяем номера столбцов по имени в выборке
+            int idColIndex = c.getColumnIndex("_id");
+            int nameColIndex = c.getColumnIndex("name");
+
+            do {
+                // получаем значения по номерам столбцов и пишем все в лог
+                Log.d("clothes",
+                        "ID = " + c.getString(idColIndex) +
+                                ", name = " + c.getString(nameColIndex));
+                // переход на следующую строку
+                // а если следующей нет (текущая - последняя), то false - выходим из цикла
+            } while (c.moveToNext());
         } else
-            Log.d("DBOperation", "0 rows");
-
-        db.addRec(id, item.name, item.minTemp, item.maxTemp, item.rain, item.wind, item.cloud, item.color);
+            Log.d("clothes", "0 rows");
+        c.close();
 
         db.close();
     }
 
-    public void deleteItem(ClothesData item){
+    public void deleteItem(String name){
         db = new DB(mCtx);
         db.open();
 
         Cursor c = db.getData("clothes", new String[]{db.COLUMN_ID}, db.COLUMN_NAME + " = ?",
-                new String[]{item.name}, null, null, null);
+                new String[]{name}, null, null, null);
 
         if (c.moveToFirst()) {
             int idColIndex = c.getColumnIndex(db.COLUMN_ID);
@@ -55,5 +66,33 @@ public class DBOperations {
         db.close();
     }
 
+
+    public ArrayList<String> getData(String name, String[] columns, String selection, String[] selectionArgs,
+                                     String groupBy, String having, String orderBy) {
+        ArrayList<String> result = new ArrayList<>();
+        db = new DB(mCtx);
+        db.open();
+
+        Cursor c = db.getData(name,columns,selection,selectionArgs,groupBy,having,orderBy);
+
+        if (c.move(45)) {
+
+            // определяем номера столбцов по имени в выборке
+            int nameColIndex = c.getColumnIndex("name");
+
+            do {
+                // получаем значения по номерам столбцов и пишем все в лог
+                Log.d("clothes","name = " + c.getString(nameColIndex));
+                result.add(c.getString(nameColIndex));
+                // переход на следующую строку
+                // а если следующей нет (текущая - последняя), то false - выходим из цикла
+            } while (c.moveToNext());
+        } else
+            Log.d("clothes", "0 rows");
+        c.close();
+
+
+        return result;
+    }
 
 }

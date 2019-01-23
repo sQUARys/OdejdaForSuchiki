@@ -50,7 +50,64 @@ public class Weather_Adapter extends RecyclerView.Adapter<VH_weather_adapter> {
         String date = format.format(newDate);
         holder.date.setText(date);
         Float s = mData.get(position).getParts().getDay().getTemp_avg();
-        holder.temp_avg.setText("ASD");
+        holder.temp_avg.setText(s.toString());
+        String condition = mData.get(position).getParts().getDay().getCondition();
+        switch (condition){
+            case "clear":
+                holder.im.setImageResource(R.drawable.sunny);
+                break;
+            case "partly-cloudy ":
+                holder.im.setImageResource(R.drawable.cloud);
+                break;
+            case "cloudy":
+                holder.im.setImageResource(R.drawable.cloud);
+                break;
+            case "overcast":
+                holder.im.setImageResource(R.drawable.cloud);
+                break;
+            case "partly-cloudy-and-light-rain":
+                holder.im.setImageResource(R.drawable.rain);
+                break;
+            case "partly-cloudy-and-rain":
+                holder.im.setImageResource(R.drawable.rain);
+                break;
+            case "overcast-and-rain":
+                holder.im.setImageResource(R.drawable.rain);
+                break;
+            case "overcast-thunderstorms-with-rain":
+                holder.im.setImageResource(R.drawable.rain);
+                break;
+            case "cloudy-and-light-rain":
+                holder.im.setImageResource(R.drawable.rain);
+                break;
+            case "overcast-and-light-rain":
+                holder.im.setImageResource(R.drawable.rain);
+                break;
+            case "cloudy-and-rain":
+                holder.im.setImageResource(R.drawable.rain);
+                break;
+            case "overcast-and-wet-snow":
+                holder.im.setImageResource(R.drawable.snowing);
+                break;
+            case "partly-cloudy-and-light-snow":
+                holder.im.setImageResource(R.drawable.snowing);
+                break;
+            case "partly-cloudy-and-snow":
+                holder.im.setImageResource(R.drawable.snowing);
+                break;
+            case "overcast-and-snow":
+                holder.im.setImageResource(R.drawable.snowing);
+                break;
+            case "cloudy-and-light-snow":
+                holder.im.setImageResource(R.drawable.snowing);
+                break;
+            case "overcast-and-light-snow":
+                holder.im.setImageResource(R.drawable.snowing);
+                break;
+            case "cloudy-and-snow":
+                holder.im.setImageResource(R.drawable.snowing);
+                break;
+        }
     }
 
     @Override
