@@ -1,6 +1,7 @@
 package com.example.mac.suchik;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,6 +34,10 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
     private Callbacks callbacks;
     Fact weather;
 
+    SharedPreferences settings;
+
+    String[] names = {"head", "glove", "scarf", "coat", "jeans", "shirt", "boot", "eyeglasses", "jogger_pants", "sweater"};
+
 
     final String LOG_TAG = "myLog";
     public GetClothes(Context mContext, Callbacks callbacks, Fact weather) {
@@ -47,6 +52,7 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
     @Override
     protected Response doInBackground(Void... voids) {
 
+        settings = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE);
 
         //Log.d(LOG_TAG, "temp = " + weather.getTemp() + " rain = " + weather.getPrec_type() + " wind = " +
         //        weather.getWind_speed() + " cloud = " + weather.getCloudness());
@@ -123,6 +129,21 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
 
         //ArrayList<String> clothes = new ArrayList<>();
 
+        ArrayList<Integer> banList = new ArrayList<>();
+
+        for (int i = 0; i < names.length; i++)
+        {
+            boolean isBaned = settings.getBoolean(names[i], false);
+            if (isBaned){
+                banList.add(i);
+            }
+        }
+
+        for (Integer integer : banList) {
+            Log.d("Ban", integer.toString());
+        }
+
+
         TreeMap<String, ArrayList<String>> clothes = new TreeMap<>();
 
         if (c.moveToFirst()) {
@@ -133,18 +154,23 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
 
             do {
                 //Log.d(LOG_TAG, "name = " + c.getString(nameColIndex) + " category = " + c.getString(categoryColIndex));
-                String item = c.getString(nameColIndex);
-                if (!c.getString(colorColIndex).isEmpty()) {
-                    item += "Цвет: " + c.getString(colorColIndex);
-                }
                 String category = c.getString(categoryColIndex);
-                item += category;
-                if (clothes.containsKey(category)) {
-                    clothes.get(category).add(item);
-                } else {
-                    ArrayList<String> list = new ArrayList<>();
-                    list.add(item);
-                    clothes.put(category, list);
+
+                if (!banList.contains(Integer.valueOf(category))) {
+
+                    String item = c.getString(nameColIndex);
+                    if (!c.getString(colorColIndex).isEmpty()) {
+                        item += "Цвет: " + c.getString(colorColIndex);
+                    }
+
+                    item += category;
+                    if (clothes.containsKey(category)) {
+                        clothes.get(category).add(item);
+                    } else {
+                        ArrayList<String> list = new ArrayList<>();
+                        list.add(item);
+                        clothes.put(category, list);
+                    }
                 }
 
             } while (c.moveToNext());
