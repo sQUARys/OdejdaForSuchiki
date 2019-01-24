@@ -36,7 +36,9 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
 
     SharedPreferences settings;
 
-    String[] names = {"head", "glove", "scarf", "coat", "jeans", "shirt", "boot", "eyeglasses", "jogger_pants", "sweater"};
+    //String[] names = {"head", "glove", "scarf", "coat", "jeans", "shirt", "boot", "eyeglasses", "jogger_pants", "sweater"};
+
+    TreeMap<Integer, String> names = new TreeMap<>();
 
 
     final String LOG_TAG = "myLog";
@@ -51,6 +53,17 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
 
     @Override
     protected Response doInBackground(Void... voids) {
+
+        names.put(0, "head");
+        names.put(1, "glove");
+        names.put(2, "scarf");
+        names.put(3, "coat");
+        names.put(4, "jeans");
+        names.put(5, "shirt");
+        names.put(6, "boot");
+        names.put(7, "eyeglasses");
+        names.put(8, "jogger_pants");
+        names.put(9, "sweater");
 
         settings = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE);
 
@@ -131,9 +144,11 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
 
         ArrayList<Integer> banList = new ArrayList<>();
 
-        for (int i = 0; i < names.length; i++)
+
+
+        for (int i = 0; i < names.size(); i++)
         {
-            boolean isBaned = settings.getBoolean(names[i], false);
+            boolean isBaned = settings.getBoolean(names.get(i), false);
             if (isBaned){
                 banList.add(i);
             }
