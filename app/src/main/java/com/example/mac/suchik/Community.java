@@ -31,7 +31,9 @@ public class Community extends AsyncTask<Void, Void, Response> {
             List<Address> list = geocoder.getFromLocation(lat, lng, 1);
             if (list != null && list.size() > 0) {
                 Address address = list.get(0);
-                result[2] = address.getLocality();
+                String city = address.getLocality();
+                if (city != null)
+                    result[2] = city;
                 //Log.d("Community", result);
             }
         } catch (IOException e) {
