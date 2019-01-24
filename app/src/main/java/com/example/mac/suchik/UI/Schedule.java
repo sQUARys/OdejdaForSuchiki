@@ -58,13 +58,13 @@ public class Schedule extends Fragment {
         alarm_off = view.findViewById(R.id.alarm_off);
         alarms = new Alarms(view.getContext());
         timePicker = view.findViewById(R.id.timePicker);
+        alarmAdapter = new AlarmAdapter(alarms);
         alarm_on.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<AlarmClock> alarmClocks = alarms.getAlarmsClock();
                 if (!alarms.createNotification(timePicker.getCurrentHour(), timePicker.getCurrentMinute())) {
-                    alarmAdapter.setList(alarmClocks);
-                    alarmAdapter.notifyDataSetChanged();
+                    ArrayList<AlarmClock> al = alarms.getAlarmsClock();
+                    alarmAdapter.addItem(al.get(al.size() - 1));
                 }
             }
         });
@@ -73,12 +73,10 @@ public class Schedule extends Fragment {
             public void onClick(View v) {
                 alarms.removeAllNotification();
                 alarmAdapter.setList(new ArrayList<AlarmClock>());
-                alarmAdapter.notifyDataSetChanged();
 
             }
         });
         rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        alarmAdapter = new AlarmAdapter(alarms);
         rv.setAdapter(alarmAdapter);
     }
 }
