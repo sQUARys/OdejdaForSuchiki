@@ -39,7 +39,7 @@ import java.util.List;
 public class TimeTable extends Fragment implements AdapterView.OnItemSelectedListener, RadioGroup.OnCheckedChangeListener,
         View.OnClickListener, ItemAdapter.ItemClickListener {
     private String name, color;
-    private int category = 0;
+    private int category = -1;
     private int minT = 100;
     private int maxT = 100;
     private int rain = 100;
@@ -193,7 +193,7 @@ public class TimeTable extends Fragment implements AdapterView.OnItemSelectedLis
 
     @Override
     public void onClick(View v) {
-        if (category == 0){
+        if (category == -1){
             Toast.makeText(getContext(), "Выберете категорию", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -228,7 +228,7 @@ public class TimeTable extends Fragment implements AdapterView.OnItemSelectedLis
 
         item = new ClothesData();
 
-        item.category = category;
+        item.category = category - 1;
         item.name = name;
         item.minTemp = minT;
         item.maxTemp = maxT;

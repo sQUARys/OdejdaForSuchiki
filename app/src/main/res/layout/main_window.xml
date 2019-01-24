@@ -64,8 +64,7 @@
         android:id="@+id/recommendation_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/temperature"
-        android:layout_marginTop="70dp"
+        android:layout_alignParentBottom="true"
         android:textColor="#000" />
 
 
@@ -76,7 +75,7 @@
         android:layout_below="@+id/date"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="15dp"
         android:textColor="#000" />
 
 

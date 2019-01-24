@@ -175,7 +175,7 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
 
                     String item = c.getString(nameColIndex);
                     if (!c.getString(colorColIndex).isEmpty()) {
-                        item += "Цвет: " + c.getString(colorColIndex);
+                        item += " цвет: " + c.getString(colorColIndex);
                     }
 
                     item += category;
