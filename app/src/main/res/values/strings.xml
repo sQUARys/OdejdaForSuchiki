@@ -25,4 +25,18 @@
         <item>0°С — 15°С</item>
         <item>Больше 15°С</item>
     </string-array>
+    <string-array name="cities">
+        <item>Москва</item>
+        <item>Рыбинск</item>
+    </string-array>
+    <string-array name="lat">
+        <item></item>
+        <item>55.7522200</item>
+        <item>58.0446000</item>
+    </string-array>
+    <string-array name="lon">
+        <item></item>
+        <item>37.6155600</item>
+        <item>38.8425900</item>
+    </string-array>
 </resources>
