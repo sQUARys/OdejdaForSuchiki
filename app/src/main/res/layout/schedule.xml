@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.MainActivityUI">
+    tools:context=".UI.MainActivityUI"
+    android:background="@color/background">
 
     <TimePicker
         android:layout_width="match_parent"
         android:id="@+id/timePicker"
         android:layout_height="wrap_content"
-        android:background="@color/white"/>
+        android:background="@color/background"/>
 
     <Button
         android:id="@+id/alarm_on"

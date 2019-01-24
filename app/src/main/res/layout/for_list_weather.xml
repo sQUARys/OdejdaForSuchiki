@@ -28,6 +28,7 @@
         android:layout_height="40dp"
         android:layout_below="@+id/part_of_sun"
         android:id="@+id/temp_avg"
+        android:textAlignment="center"
         android:textSize="20sp" />
 
     <ImageView

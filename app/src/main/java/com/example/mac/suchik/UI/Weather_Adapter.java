@@ -54,8 +54,14 @@ public class Weather_Adapter extends RecyclerView.Adapter<VH_weather_adapter> {
 
 
         Float s = mData.get(position).getParts().getDay().getTemp_avg();
-        if (!isF) holder.temp_avg.setText(s.toString() + "°С");
-        else holder.temp_avg.setText(String.valueOf((s * 9 / 5) + 32) + "°F");
+        if (!isF) {
+            if (s > 0) holder.temp_avg.setText(String.format("+" + "%.0f" + "°С", s));
+            else holder.temp_avg.setText(String.format("%.0f °С", s));
+        } else {
+            float far = (s * 9 / 5) + 32;
+            if (far > 0) holder.temp_avg.setText(String.format("+" + "%.0f" + "°F", far));
+            else holder.temp_avg.setText(String.format("%.0f" + "°F", far));
+        }
         String condition = mData.get(position).getParts().getDay().getCondition();
         switch (condition){
             case "clear":

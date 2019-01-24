@@ -136,7 +136,9 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
             if (weather.getTemp() > 0) temperature.setText(String.format("+" + "%.0f" + "°С", weather.getTemp()));
             else temperature.setText(String.format("%.0f °С", weather.getTemp()));
         } else {
-            temperature.setText(String.format("+" + "%.0f" + "°F", (weather.getTemp() * 9 / 5) + 32));
+            float far = (weather.getTemp() * 9 / 5) + 32;
+            if (far > 0) temperature.setText(String.format("+" + "%.0f" + "°F", far));
+            else temperature.setText(String.format("%.0f" + "°F", far));
         }
     }
     public void onChangedWeatherDraw(Fact weather){
