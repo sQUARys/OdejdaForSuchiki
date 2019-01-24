@@ -139,6 +139,10 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
             }
         }
 
+        for (Integer integer : banList) {
+            Log.d("Ban", integer.toString());
+        }
+
 
         TreeMap<String, ArrayList<String>> clothes = new TreeMap<>();
 
@@ -152,7 +156,7 @@ public class GetClothes extends AsyncTask<Void, Void, Response> {
                 //Log.d(LOG_TAG, "name = " + c.getString(nameColIndex) + " category = " + c.getString(categoryColIndex));
                 String category = c.getString(categoryColIndex);
 
-                if (!banList.contains(category)) {
+                if (!banList.contains(Integer.valueOf(category))) {
 
                     String item = c.getString(nameColIndex);
                     if (!c.getString(colorColIndex).isEmpty()) {

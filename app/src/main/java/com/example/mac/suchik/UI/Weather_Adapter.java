@@ -1,5 +1,6 @@
 package com.example.mac.suchik.UI;
 
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,9 +21,11 @@ import java.util.List;
 
 public class Weather_Adapter extends RecyclerView.Adapter<VH_weather_adapter> {
     private List<Forecasts> mData;
+    private boolean isF;
 
-    public Weather_Adapter(List<Forecasts> data) {
+    public Weather_Adapter(List<Forecasts> data, boolean isF) {
         super();
+        this.isF = isF;
         mData = data;
     }
 
@@ -45,12 +48,14 @@ public class Weather_Adapter extends RecyclerView.Adapter<VH_weather_adapter> {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         format = new SimpleDateFormat("dd-MM");
         String date = format.format(newDate);
         holder.date.setText(date);
+
+
         Float s = mData.get(position).getParts().getDay().getTemp_avg();
-        holder.temp_avg.setText(s.toString() + "°С");
+        if (!isF) holder.temp_avg.setText(s.toString() + "°С");
+        else holder.temp_avg.setText(String.valueOf((s * 9 / 5) + 32) + "°F");
         String condition = mData.get(position).getParts().getDay().getCondition();
         switch (condition){
             case "clear":

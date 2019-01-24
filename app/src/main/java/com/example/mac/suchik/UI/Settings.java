@@ -52,6 +52,8 @@ public class Settings extends Fragment {
 
     SharedPreferences.Editor ed;
 
+    boolean count = false;
+
 
     @Nullable
     @Override
@@ -64,43 +66,52 @@ public class Settings extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        head = view.findViewById(R.id.head);
-        head.setOnCheckedChangeListener(new SettingsChangeListener(HEAD));
-
-        glove = view.findViewById(R.id.head);
-        glove.setOnCheckedChangeListener(new SettingsChangeListener(GLOVE));
-
-        scarf = view.findViewById(R.id.scarf);
-        scarf.setOnCheckedChangeListener(new SettingsChangeListener(SCARF));
-
-        coat = view.findViewById(R.id.coat);
-        coat.setOnCheckedChangeListener(new SettingsChangeListener(COAT));
-
-        jeans = view.findViewById(R.id.jeans);
-        jeans.setOnCheckedChangeListener(new SettingsChangeListener(JEANS));
-
-        shirt = view.findViewById(R.id.shirt);
-        shirt.setOnCheckedChangeListener(new SettingsChangeListener(SHIRT));
-
-        boot = view.findViewById(R.id.boot);
-        boot.setOnCheckedChangeListener(new SettingsChangeListener(BOOT));
-
-        eyeglasses = view.findViewById(R.id.eyeglasses);
-        eyeglasses.setOnCheckedChangeListener(new SettingsChangeListener(EYEGLASSES));
-
-        jogger_pants = view.findViewById(R.id.jogger_pants);
-        jogger_pants.setOnCheckedChangeListener(new SettingsChangeListener(JOGGER_PANTS));
-
-        sweater = view.findViewById(R.id.sweater);
-        sweater.setOnCheckedChangeListener(new SettingsChangeListener(SWEATER));
-
         settings = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
+
+        degrees = view.findViewById(R.id.monitored_switch);
+        if (settings.getBoolean(DEGREES, false)) {degrees.setText("°F"); degrees.setChecked(true);}
+        degrees.setOnCheckedChangeListener(new SwitchChangeListener());
+
+        head = view.findViewById(R.id.head);
+        glove = view.findViewById(R.id.head);
+        scarf = view.findViewById(R.id.scarf);
+        coat = view.findViewById(R.id.coat);
+        jeans = view.findViewById(R.id.jeans);
+        shirt = view.findViewById(R.id.shirt);
+        boot = view.findViewById(R.id.boot);
+        eyeglasses = view.findViewById(R.id.eyeglasses);
+        jogger_pants = view.findViewById(R.id.jogger_pants);
+        sweater = view.findViewById(R.id.sweater);
+
+        if (settings.getBoolean(HEAD, false)) head.setChecked(true);
+        if (settings.getBoolean(GLOVE, false)) glove.setChecked(true);
+        if (settings.getBoolean(SCARF, false)) scarf.setChecked(true);
+        if (settings.getBoolean(COAT, false)) coat.setChecked(true);
+        if (settings.getBoolean(JEANS, false)) jeans.setChecked(true);
+        if (settings.getBoolean(SHIRT, false)) shirt.setChecked(true);
+        if (settings.getBoolean(BOOT, false)) boot.setChecked(true);
+        if (settings.getBoolean(EYEGLASSES, false)) eyeglasses.setChecked(true);
+        if (settings.getBoolean(JOGGER_PANTS, false)) jogger_pants.setChecked(true);
+        if (settings.getBoolean(SWEATER, false)) sweater.setChecked(true);
+
+        head.setOnCheckedChangeListener(new SettingsChangeListener(HEAD));
+        glove.setOnCheckedChangeListener(new SettingsChangeListener(GLOVE));
+        scarf.setOnCheckedChangeListener(new SettingsChangeListener(SCARF));
+        coat.setOnCheckedChangeListener(new SettingsChangeListener(COAT));
+        jeans.setOnCheckedChangeListener(new SettingsChangeListener(JEANS));
+        shirt.setOnCheckedChangeListener(new SettingsChangeListener(SHIRT));
+        boot.setOnCheckedChangeListener(new SettingsChangeListener(BOOT));
+        eyeglasses.setOnCheckedChangeListener(new SettingsChangeListener(EYEGLASSES));
+        jogger_pants.setOnCheckedChangeListener(new SettingsChangeListener(JOGGER_PANTS));
+        sweater.setOnCheckedChangeListener(new SettingsChangeListener(SWEATER));
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        ed.apply();
+        if (count){
+            ed.apply();
+        }
 
     }
 
@@ -115,6 +126,23 @@ public class Settings extends Fragment {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             ed = settings.edit();
             ed.putBoolean(settingName, isChecked);
+            ed.commit();
+            count = true;
+        }
+    }
+
+    class SwitchChangeListener implements Switch.OnCheckedChangeListener{
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            ed = settings.edit();
+            ed.putBoolean(DEGREES, isChecked);
+            ed.commit();
+            if (isChecked){
+                degrees.setText("°F");
+            } else{
+                degrees.setText("°C");
+            }
         }
     }
 }

@@ -45,7 +45,6 @@
         android:layout_width="170dp"
         android:layout_height="150dp"
         android:layout_marginTop="50dp"
-        android:layout_marginLeft="30dp"
         android:layout_toRightOf="@+id/for_recommendation_list"
         android:layout_below="@+id/date"
         android:src="@drawable/start" />
@@ -55,7 +54,7 @@
         android:layout_width="120dp"
         android:layout_height="50dp"
         android:layout_below="@+id/weather_cloud"
-        android:layout_marginLeft="55dp"
+        android:layout_marginLeft="25dp"
         android:layout_toRightOf="@+id/for_recommendation_list"
         android:textAlignment="center"
         android:textColor="#000"
@@ -72,7 +71,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/for_recommendation_list"
-        android:layout_width="150dp"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/date"
         android:layout_marginStart="10dp"

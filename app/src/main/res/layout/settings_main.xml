@@ -48,54 +48,55 @@
             android:id="@+id/glove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Головные уборы" />
+            android:text="Перчатки" />
 
         <CheckBox
             android:id="@+id/scarf"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Шарфы"/>
 
         <CheckBox
             android:id="@+id/coat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Головные уборы" />
+            android:text="Верхняя одежда" />
 
         <CheckBox
             android:id="@+id/jeans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Головные уборы" />
+            android:text="Брюки" />
 
         <CheckBox
             android:id="@+id/shirt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Головные уборы" />
+            android:text="Футболки" />
 
         <CheckBox
             android:id="@+id/boot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Головные уборы" />
+            android:text="Обувь" />
 
         <CheckBox
             android:id="@+id/eyeglasses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Головные уборы" />
+            android:text="Аксессуары" />
 
         <CheckBox
             android:id="@+id/jogger_pants"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Головные уборы" />
+            android:text="Термобелье" />
 
         <CheckBox
             android:id="@+id/sweater"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Головные уборы" />
+            android:text="Кофты" />
     </LinearLayout>
 
 
