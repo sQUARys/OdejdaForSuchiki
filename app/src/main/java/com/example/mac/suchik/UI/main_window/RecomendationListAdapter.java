@@ -56,13 +56,13 @@ public class RecomendationListAdapter extends RecyclerView.Adapter<VH> {
             case 6:
                 holder.category.setImageResource(R.drawable.boot);
                 break;
-            case 9:
+            case 7:
                 holder.category.setImageResource(R.drawable.eyeglasses);
                 break;
-            case 7:
+            case 8:
                 holder.category.setImageResource(R.drawable.joggerpants);
                 break;
-            case 8:
+            case 9:
                 holder.category.setImageResource(R.drawable.sweater);
                 break;
         }

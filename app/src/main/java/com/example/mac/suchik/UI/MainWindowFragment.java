@@ -1,6 +1,8 @@
 package com.example.mac.suchik.UI;
 
 import android.Manifest;
+import android.app.Activity;
+import android.bluetooth.le.AdvertiseSettings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -69,6 +71,8 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
 
     String dateText;
 
+    boolean isF;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -106,7 +110,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
         String[] position = geoposition.start();
         //mStorage.setPosition("55.45", "37.36");
         mStorage.setPosition(position[0], position[1]);
-        mStorage.updateWeather(false);
+        //mStorage.updateWeather(false);
     }
 
     @Override
@@ -140,14 +144,20 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         Date currentDate = new Date();
         dateText = dateFormat.format(currentDate);
+
+        SharedPreferences settings = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
+        isF = settings.getBoolean("degrees", false);
     }
 
     public void onWeatherDataUpdated(Fact weather) {
-        if(weather.getTemp() > 0)
-        temperature.setText(String.format("+" + "%.1f" + "°С", weather.getTemp()));
-        else if (weather.getTemp() < 0)
-            temperature.setText(String.format("%.1f °С", weather.getTemp()));
-        else temperature.setText("0");
+        if (!isF) {
+            if (weather.getTemp() > 0) temperature.setText(String.format("+" + "%.0f" + "°С", weather.getTemp()));
+            else temperature.setText(String.format("%.0f °С", weather.getTemp()));
+        } else {
+            float far = (weather.getTemp() * 9 / 5) + 32;
+            if (far > 0) temperature.setText(String.format("+" + "%.0f" + "°F", far));
+            else temperature.setText(String.format("%.0f" + "°F", far));
+        }
     }
     public void onChangedWeatherDraw(Fact weather){
         String condition = weather.getCondition();
@@ -286,14 +296,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
                 break;
             case ResponseType.WFORECASTS:
                 List<Forecasts> forecasts = (List<Forecasts>) response.response;
-//               if (forecasts.get(0).getParts() == null){
-//                   Log.d("forcast", "null!");
-//               } else{
-//                   for (Forecasts forecast : forecasts) {
-//                       Log.d("forcast", String.valueOf(forecast.getParts().getDay().getTemp_avg()));
-//                   }
-//               }
-                rv.setAdapter(new Weather_Adapter(forecasts.subList(1 , 8)));
+                rv.setAdapter(new Weather_Adapter(forecasts.subList(1 , 8), isF));
                 progressBar.setVisibility(ProgressBar.INVISIBLE);
                 date.setText(dateText);
                 break;

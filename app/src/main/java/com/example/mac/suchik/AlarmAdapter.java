@@ -19,8 +19,8 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmHolder> {
     TextView second;
     private ArrayList<AlarmClock> mData;
     private Alarms alarms;
-    public AlarmAdapter(Alarms alarms) {
-        mData = alarms.getAlarmsClock();
+    public AlarmAdapter(final Alarms alarms) {
+        mData = new ArrayList<AlarmClock>(){{addAll(alarms.getAlarmsClock());}};
         this.alarms = alarms;
     }
 
@@ -40,7 +40,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmHolder> {
         @Override
         public void onClick(View v) {
             alarms.removeNotification(Integer.parseInt(mData.get(id).getId()), id);
-            notifyDataSetChanged();
+            removeItem(id);
         }
     }
 
@@ -60,5 +60,16 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmHolder> {
     public void setList(ArrayList<AlarmClock> new_elements){
         mData.clear();
         mData.addAll(new_elements);
+        notifyDataSetChanged();
+    }
+
+    public void removeItem(int pos){
+        mData.remove(pos);
+        notifyDataSetChanged();
+    }
+
+    public void addItem(AlarmClock alarmClock){
+        mData.add(alarmClock);
+        notifyDataSetChanged();
     }
 }
