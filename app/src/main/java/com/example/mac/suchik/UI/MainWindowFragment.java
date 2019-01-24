@@ -82,9 +82,6 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
         mStorage.subscribe(ResponseType.WFORECASTS, this);
         gson = new Gson();
         sp = getContext().getSharedPreferences("city", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("city", "");
-        editor.commit();
         if (!sp.getString("city", "").equals("")){
             CitySave citySave = gson.fromJson(sp.getString("city", ""), CitySave.class);
             cityPos = citySave.getcityPos();
@@ -238,8 +235,16 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
                             add(res[2]);
                             addAll(cities);
                         }});
-                        cityPos.put(0, new String[]{res[0], res[1]});
-                        cities.add(res[2]);
+                        HashMap<Integer, String[]> now = new HashMap<>();
+                        now.put(0, new String[]{res[0], res[1]});
+                        int i = 1;
+                        for (Map.Entry entry: cityPos.entrySet()) {
+                            now.put(i, (String[]) entry.getValue());
+                            i++;
+                        }
+                        cityPos.clear();
+                        cityPos.putAll(now);
+                        cities.add(0, res[2]);
                     }
                     else {
                         int id = cities.indexOf(res[2]);
@@ -247,8 +252,12 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
                         cityPos.remove(id);
                         HashMap<Integer, String[]> now = new HashMap<>();
                         now.put(0, new String[]{res[0], res[1]});
-                        for (Map.Entry entry: cityPos.entrySet())
-                            now.put((int) entry.getKey() + 1, (String[]) entry.getValue());
+                        int i = 1;
+                        for (Map.Entry entry: cityPos.entrySet()) {
+                            now.put(i, (String[]) entry.getValue());
+                            i++;
+                        }
+                        cityPos.clear();
                         cityPos.putAll(now);
                         arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, new ArrayList<String>() {{
                             add(res[2]);

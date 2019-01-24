@@ -30,12 +30,10 @@
         <item>Рыбинск</item>
     </string-array>
     <string-array name="lat">
-        <item></item>
         <item>55.7522200</item>
         <item>58.0446000</item>
     </string-array>
     <string-array name="lon">
-        <item></item>
         <item>37.6155600</item>
         <item>38.8425900</item>
     </string-array>
