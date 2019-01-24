@@ -229,7 +229,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
                 final String[] res = (String[]) response.response;
                 String community = res[2];
                 Log.d("community", "community = " + community);
-                if (!first) {
+                if (res[2].equals(cities.get(0)) && !first) {
                     if (!cities.contains(res[2])) {
                         arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, new ArrayList<String>() {{
                             add(res[2]);
@@ -269,7 +269,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
                     spinnerCity.setOnItemSelectedListener(this);
                     first = true;
                 }
-                else {
+                else if (res[2].equals(cities.get(0))){
                     if (!res[2].equals("") && !cities.contains(res[2])) {
                         arrayAdapter.add(res[2]);
                         cities.add(res[2]);
