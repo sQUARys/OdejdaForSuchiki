@@ -41,7 +41,6 @@
         android:layout_below="@+id/alarm_on"
         android:layout_toLeftOf="@+id/alarm_off"
         android:layout_toRightOf="@+id/alarm_on"
-        android:text="Large Text"
         android:gravity="center"/>
 
 </RelativeLayout>

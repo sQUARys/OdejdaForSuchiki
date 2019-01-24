@@ -26,6 +26,7 @@ public class MainActivityUI extends AppCompatActivity {
         actionbar = getSupportActionBar();
         actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#84B3D5")));//change color of action bar
         Storage.getOrCreate(getApplicationContext());
+        actionbar.setTitle("WAW");
         //actionbar.setBackgroundDrawable(getDrawable(R.drawable.backgtoundmusttop));
 //        actionbar.setDisplayShowTitleEnabled (false);
         if (savedInstanceState == null) {
