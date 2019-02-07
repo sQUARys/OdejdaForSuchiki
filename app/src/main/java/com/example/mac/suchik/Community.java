@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class Community extends AsyncTask<Void, Void, Response> {
-    private Context mCtx;
+    public Context mCtx;
     private double lat, lng;
     private Callbacks callbacks;
 

@@ -49,7 +49,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MainWindowFragment extends Fragment implements Callbacks, AdapterView.OnItemSelectedListener {
-    public static Storage mStorage;
+    public  Storage mStorage;
     private TextView date;
     private ImageView weather_cloud;
     private TextView temperature;
@@ -57,7 +57,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
     private RecyclerView rv_clothes;
     private Spinner spinnerCity;
 
-    private String[] position;
+    public String[] position;
     private ArrayAdapter arrayAdapter;
     private boolean first;
     private SharedPreferences sp;
@@ -76,7 +76,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getPermissions();
+//        getPermissions();
         mStorage = Storage.getOrCreate(null); // null потому что я надеюсь, что Storage уже инициализирован
 
         mStorage.subscribe(ResponseType.GGEOPOSITION, this);
@@ -306,13 +306,13 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
         }
     }
 
-    private void getPermissions(){
-        while (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission
-                (getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-        }
-    }
+//    private void getPermissions(){
+//        while (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission
+//                (getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+//        }
+//    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

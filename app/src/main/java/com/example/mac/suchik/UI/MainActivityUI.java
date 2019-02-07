@@ -5,15 +5,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.mac.suchik.R;
 import com.example.mac.suchik.Storage;
 
 public class MainActivityUI extends AppCompatActivity {
     public android.support.v7.app.ActionBar actionbar;
-
     public static final int MAIN_WINDOW_FRAGMENT = 1;
     public static final int SCHEDULE_WINDOW_FRAGMENT = 2;
     public static final int MY_LIST = 3;
@@ -23,12 +24,14 @@ public class MainActivityUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        actionbar = getSupportActionBar();
-        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#84B3D5")));//change color of action bar
+//        actionbar = getSupportActionBar();
+//        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#84B3D5")));//change color of action bar
+        Toolbar toolbar =  findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(null);
         Storage.getOrCreate(getApplicationContext());
-        actionbar.setTitle("WAW");
-        //actionbar.setBackgroundDrawable(getDrawable(R.drawable.backgtoundmusttop));
-//        actionbar.setDisplayShowTitleEnabled (false);
+//        actionbar.setTitle("WAW");
+//          actionbar.setDisplayShowTitleEnabled (false);
         if (savedInstanceState == null) {
             openFragment(MAIN_WINDOW_FRAGMENT);
         }
@@ -60,7 +63,7 @@ public class MainActivityUI extends AppCompatActivity {
     }
 
     public void openFragment(int fragmentId) {
-        Fragment fragment = null;
+        Fragment fragment;
         switch (fragmentId) {
             case SCHEDULE_WINDOW_FRAGMENT:
                 fragment = new Schedule();
@@ -81,5 +84,6 @@ public class MainActivityUI extends AppCompatActivity {
                 .replace(R.id.container, fragment)
                 .commit();
     }
-
+    public void btnClick(View view){
+    }
 }
