@@ -118,6 +118,19 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
         mStorage.unsubscribe(this);
         super.onStop();
         SharedPreferences.Editor editor = sp.edit();
+        if (cities.contains("Текущее")){
+            int id = cities.indexOf("Текущее");
+            cities.remove(id);
+            cityPos.remove(id);
+            HashMap<Integer, String[]> now = new HashMap<>();
+            int i = 0;
+            for (Map.Entry entry: cityPos.entrySet()) {
+                now.put(i, (String[]) entry.getValue());
+                i++;
+            }
+            cityPos.clear();
+            cityPos.putAll(now);
+        }
         CitySave save = new CitySave();
         save.setCities(cities);
         save.setcityPos(cityPos);
@@ -147,6 +160,11 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
 
         SharedPreferences settings = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         isF = settings.getBoolean("degrees", false);
+
+        spinnerCity.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.spinner_item, new ArrayList<String>() {{
+            addAll(cities);
+        }}));
+        spinnerCity.setOnItemSelectedListener(this);
     }
 
     public void onWeatherDataUpdated(Fact weather) {
@@ -238,8 +256,10 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
             case ResponseType.COMMUNITY:
                 final String[] res = (String[]) response.response;
                 String community = res[2];
+                if (res[2].equals("") && res[0].equals("null") && res[1].equals("null"))
+                    res[2] = "Текущее";
                 Log.d("community", "community = " + community);
-                if (res[2].equals(cities.get(0)) && !first) {
+                if (!res[2].equals(cities.get(0)) && !first) {
                     if (!cities.contains(res[2])) {
                         arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, new ArrayList<String>() {{
                             add(res[2]);
@@ -276,14 +296,16 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
                         cities.add(0, res[2]);
                     }
                     spinnerCity.setAdapter(arrayAdapter);
-                    spinnerCity.setOnItemSelectedListener(this);
                     first = true;
                 }
-                else if (res[2].equals(cities.get(0))){
-                    if (!res[2].equals("") && !cities.contains(res[2])) {
-                        arrayAdapter.add(res[2]);
-                        cities.add(res[2]);
+                else if (!res[2].equals(cities.get(0))){
+                    if (!cities.contains(res[2])) {
+                        arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, new ArrayList<String>() {{
+                            add(res[2]);
+                            addAll(cities);
+                        }});cities.add(0, res[2]);
                         cityPos.put(cityPos.size(), new String[]{res[0], res[1]});
+                        spinnerCity.setAdapter(arrayAdapter);
                     }
                 }
                 break;
@@ -298,6 +320,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
                 List<Forecasts> forecasts = (List<Forecasts>) response.response;
                 rv.setAdapter(new Weather_Adapter(forecasts.subList(1 , 8), isF));
                 progressBar.setVisibility(ProgressBar.INVISIBLE);
+                spinnerCity.setVisibility(Spinner.VISIBLE);
                 date.setText(dateText);
                 break;
             case ResponseType.GEOERROR:
