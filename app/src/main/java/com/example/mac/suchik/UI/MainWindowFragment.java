@@ -284,6 +284,5 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 }
