@@ -4,9 +4,7 @@
 
     <item
         android:id="@+id/main_window_btn"
-        android:layout_width="wrap_content"
-        android:icon="@drawable/icon"
-        android:title="Main window" />
+        android:icon="@drawable/icon" />
     <item
         android:id="@+id/schedule_btn"
         android:icon="@drawable/clock"

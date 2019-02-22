@@ -6,6 +6,7 @@ import android.bluetooth.le.AdvertiseSettings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.hardware.camera2.CaptureRequest;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,18 +26,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.mac.suchik.Callbacks;
-import com.example.mac.suchik.CitySave;
 import com.example.mac.suchik.Geoposition;
 import com.example.mac.suchik.R;
 import com.example.mac.suchik.Response;
 import com.example.mac.suchik.ResponseType;
 import com.example.mac.suchik.Storage;
 import com.example.mac.suchik.UI.main_window.RecomendationListAdapter;
+import com.example.mac.suchik.UI.settings_page.VH;
 import com.example.mac.suchik.WeatherData.Fact;
 import com.example.mac.suchik.WeatherData.Forecasts;
-import com.google.gson.Gson;
 
-import java.security.KeyStore;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,10 +45,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class MainWindowFragment extends Fragment implements Callbacks, AdapterView.OnItemSelectedListener {
-    public  Storage mStorage;
+    public static Storage mStorage;
     private TextView date;
     private ImageView weather_cloud;
     private TextView temperature;
@@ -57,17 +57,22 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
     private RecyclerView rv_clothes;
     private Spinner spinnerCity;
 
-    public String[] position;
+    private String[] position;
     private ArrayAdapter arrayAdapter;
     private boolean first;
-    private SharedPreferences sp;
 
-    private HashMap<Integer, String[]> cityPos = new HashMap<>();
-    private List<String> cities = new LinkedList<>();
+    private HashMap<Integer, String[]> CityPos = new HashMap<Integer, String[]>(){{
+        put(0, new String[]{"50", "36"});
+        put(1, new String[]{"55.7522200", "37.6155600"});
+        put(2, new String[]{"58.0446000", "38.8425900"});
+    }};
+    private List<String> cities = new LinkedList<String>(){{
+        add("Москва");
+        add("Рыбинск");
+    }};
     private ProgressBar progressBar;
 
     private Fact f;
-    private Gson gson;
 
     String dateText;
 
@@ -76,7 +81,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        getPermissions();
+        getPermissions();
         mStorage = Storage.getOrCreate(null); // null потому что я надеюсь, что Storage уже инициализирован
 
         mStorage.subscribe(ResponseType.GGEOPOSITION, this);
@@ -84,22 +89,6 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
         mStorage.subscribe(ResponseType.COMMUNITY, this);
         mStorage.subscribe(ResponseType.CLOTHES, this);
         mStorage.subscribe(ResponseType.WFORECASTS, this);
-        gson = new Gson();
-        sp = getContext().getSharedPreferences("city", Context.MODE_PRIVATE);
-        if (!sp.getString("city", "").equals("")){
-            CitySave citySave = gson.fromJson(sp.getString("city", ""), CitySave.class);
-            cityPos = citySave.getcityPos();
-            cities = citySave.getCities();
-        }
-        else {
-            String[] cities2 = getResources().getStringArray(R.array.cities);
-            cities.addAll(Arrays.asList(cities2));
-            String[] lats = getResources().getStringArray(R.array.lat);
-            String[] lons = getResources().getStringArray(R.array.lon);
-            for (int i = 0; i < lats.length; i++) {
-                cityPos.put(i, new String[]{lats[i], lons[i]});
-            }
-        }
         return inflater.inflate(R.layout.main_window, container, false);
     }
     @Override
@@ -117,14 +106,7 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
     public void onStop() {
         mStorage.unsubscribe(this);
         super.onStop();
-        SharedPreferences.Editor editor = sp.edit();
-        CitySave save = new CitySave();
-        save.setCities(cities);
-        save.setcityPos(cityPos);
-        editor.putString("city", gson.toJson(save));
-        editor.apply();
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -239,51 +221,23 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
                 final String[] res = (String[]) response.response;
                 String community = res[2];
                 Log.d("community", "community = " + community);
-                if (res[2].equals(cities.get(0)) && !first) {
-                    if (!cities.contains(res[2])) {
-                        arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, new ArrayList<String>() {{
-                            add(res[2]);
-                            addAll(cities);
-                        }});
-                        HashMap<Integer, String[]> now = new HashMap<>();
-                        now.put(0, new String[]{res[0], res[1]});
-                        int i = 1;
-                        for (Map.Entry entry: cityPos.entrySet()) {
-                            now.put(i, (String[]) entry.getValue());
-                            i++;
-                        }
-                        cityPos.clear();
-                        cityPos.putAll(now);
-                        cities.add(0, res[2]);
-                    }
-                    else {
-                        int id = cities.indexOf(res[2]);
-                        cities.remove(id);
-                        cityPos.remove(id);
-                        HashMap<Integer, String[]> now = new HashMap<>();
-                        now.put(0, new String[]{res[0], res[1]});
-                        int i = 1;
-                        for (Map.Entry entry: cityPos.entrySet()) {
-                            now.put(i, (String[]) entry.getValue());
-                            i++;
-                        }
-                        cityPos.clear();
-                        cityPos.putAll(now);
-                        arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, new ArrayList<String>() {{
-                            add(res[2]);
-                            addAll(cities);
-                        }});
-                        cities.add(0, res[2]);
-                    }
+                if (!first) {
+                    arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, new ArrayList<String>(){{
+                        add(res[2]);
+                        add("Москва");
+                        add("Рыбинск");
+                    }});
+                    CityPos.put(0, new String[]{res[0], res[1]});
+                    cities.add(res[2]);
                     spinnerCity.setAdapter(arrayAdapter);
                     spinnerCity.setOnItemSelectedListener(this);
                     first = true;
                 }
-                else if (res[2].equals(cities.get(0))){
+                else {
                     if (!res[2].equals("") && !cities.contains(res[2])) {
                         arrayAdapter.add(res[2]);
                         cities.add(res[2]);
-                        cityPos.put(cityPos.size(), new String[]{res[0], res[1]});
+                        CityPos.put(CityPos.size(), new String[]{res[0], res[1]});
                     }
                 }
                 break;
@@ -296,6 +250,13 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
                 break;
             case ResponseType.WFORECASTS:
                 List<Forecasts> forecasts = (List<Forecasts>) response.response;
+//               if (forecasts.get(0).getParts() == null){
+//                   Log.d("forcast", "null!");
+//               } else{
+//                   for (Forecasts forecast : forecasts) {
+//                       Log.d("forcast", String.valueOf(forecast.getParts().getDay().getTemp_avg()));
+//                   }
+//               }
                 rv.setAdapter(new Weather_Adapter(forecasts.subList(1 , 8), isF));
                 progressBar.setVisibility(ProgressBar.INVISIBLE);
                 date.setText(dateText);
@@ -306,17 +267,17 @@ public class MainWindowFragment extends Fragment implements Callbacks, AdapterVi
         }
     }
 
-//    private void getPermissions(){
-//        while (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission
-//                (getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-//        }
-//    }
+    private void getPermissions(){
+        while (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission
+                (getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String[] pos = cityPos.get(position);
+        String[] pos = CityPos.get(position);
         mStorage.setPosition(pos[0], pos[1]);
         mStorage.getCurrentCommunity();
     }

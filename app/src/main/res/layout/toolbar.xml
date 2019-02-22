@@ -13,7 +13,6 @@
             android:layout_weight="1"
             android:id="@+id/main_window_btn"
             android:background="#ffffff"
-            android:src="@drawable/homebutton"
             android:onClick="btnClick"/>
 
         <ImageButton
@@ -22,7 +21,6 @@
             android:background="#ffffff"
             android:layout_weight="1"
             android:id="@+id/schedule_btn"
-            android:src="@drawable/homebutton"
             android:onClick="btnClick"/>
         <ImageButton
             android:layout_width="50dp"
@@ -30,7 +28,6 @@
             android:background="#ffffff"
             android:layout_weight="1"
             android:id="@+id/list_btn"
-            android:src="@drawable/homebutton"
             android:onClick="btnClick"/>
         <ImageButton
             android:layout_width="50dp"
@@ -38,7 +35,6 @@
             android:background="#ffffff"
             android:id="@+id/settings_btn"
             android:layout_weight="1"
-            android:src="@drawable/homebutton"
             android:onClick="btnClick"/>
     </LinearLayout>
 </android.support.v7.widget.Toolbar>
